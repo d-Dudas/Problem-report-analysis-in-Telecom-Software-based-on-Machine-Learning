@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 
+#connect to db
 prontos_collection = MongoClient().prontosdb.prontos_collection
 releases = {}
 key = "release"
