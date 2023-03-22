@@ -10,6 +10,7 @@ for pronto in prontos_collection.find():
     # pronto[key] is a list: ['SBTS00']
     # isn't clear if this list could have multiple values
     # so we assume that it could have, for worst case scenario 
+    # + if state : CNN
     for release in pronto[key]:
         if release in releases.keys():
             releases[release] += 1
