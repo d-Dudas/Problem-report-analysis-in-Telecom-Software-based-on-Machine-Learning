@@ -41,19 +41,19 @@ def upload_prontos(json_file):
 # the occurence percentage for each
 # key - valid values : "groupInCharge", "state", "faultAnalysisGroupInCharge"
 def list_groups_and_resolutions_and_occ_percentages(key):
-    
+
     total_prontos = prontos_collection.count_documents({})
     occ_count = {}
-    
+
     #print('Total prontos: {}.'.format(total_prontos))
- 
+
     # Create a dictionary with groups as keys, and number of occurences as value
     for pronto in prontos_collection.find():
         if pronto[key] in occ_count.keys():
             occ_count[pronto[key]] += 1
         else:
             occ_count[pronto[key]] = 1
-    
+
     # Print the rezult
     for group in occ_count.keys():
         print("{} : {} %".format(group, occ_count[group] * 100 / total_prontos))
@@ -119,7 +119,7 @@ def print_state_percentage(state):
 # And sort them by key
 # key - valid values: "attachedPRs", "informationrequestID"
 def sort_by(key):
-    
+
     # Make a list with with each pronto
     # identified by a dict: {problemReportId : length of the key's value's list}
     prontos_list = []
@@ -131,5 +131,3 @@ def sort_by(key):
 
     for i in prontos_list: print(i)
     #print(prontos_list)
-
-sort_by("attachedPRs")
