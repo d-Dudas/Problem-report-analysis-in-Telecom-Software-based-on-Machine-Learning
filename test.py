@@ -77,22 +77,30 @@ def label_encode_gic(prontos_collection = MongoClient().prontosdb.prontos_collec
     encoded_gic = label_encoder.fit_transform(gic_list)
     return encoded_gic
 
+def get_encoded_state(prontos_collection = MongoClient().prontosdb.prontos_collection):
+    state_list=[]
+    for pronto in prontos_collection.find({}):
+       state_list.append(pronto["state"].split('_', 1)[0])
+    
+    le = preprocessing.LabelEncoder()
+    return le.fit_transform(state_list)
 
 title_desc_vec = get_title_desc_vector()
-gic = get_encoded_gic()
+gic = get_encoded_state()
 x_train, x_test, y_train, y_test = train_test_split(title_desc_vec.toarray(), gic, test_size=0.3)
 
 #Gaussian Naive Bayes
-gnb = GaussianNB()
+"""gnb = GaussianNB()
 gnb.fit(x_train, y_train)
 accuracy=gnb.score(x_test,y_test)
-
+"""
 
 #Multinomial Naive Bayes
-"""from sklearn.naive_bayes import MultinomialNB
+#it has better accuracy for us
+from sklearn.naive_bayes import MultinomialNB
 clf = MultinomialNB()
 clf.fit(x_train, y_train)
-accuracy=clf.score(x_test,y_test)"""
+accuracy=clf.score(x_test,y_test)
 
 
 
