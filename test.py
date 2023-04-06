@@ -4,6 +4,8 @@ import TfidfVector
 from sklearn.feature_extraction import DictVectorizer
 import scipy.sparse as sp
 from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
 
 def get_tokenized_title_and_description(prontos_collection = MongoClient().prontosdb.prontos_collection):
     tokenized_titles_descriptions = []
@@ -15,16 +17,14 @@ def get_tokenized_title_and_description(prontos_collection = MongoClient().pront
 
 def get_title_desc_vector():
     return TfidfVector.get_tfidfVector(
-        TfidfVector.get_rejoined_processed_tokens(
-        TfidfVector.get_stemmed_tokens(
-        TfidfVector.get_filtered_tokens(
-        get_tokenized_title_and_description()
+            TfidfVector.get_rejoined_processed_tokens(
+                TfidfVector.get_stemmed_tokens(
+                    TfidfVector.get_filtered_tokens(
+                        get_tokenized_title_and_description()
+                    )
+                )
+            )
         )
-        )
-        )
-    )
-
-# print("Matrix shape: {}".format(get_title_desc_vector().shape))
 
 # Turn feature, groupInCharge and
 # release into DictVectorizer features
@@ -47,12 +47,41 @@ def get_concatenated_features():
                       get_useful_features_dict()])
 
 # Turns groups in charge into numbered fields
-def get_encoded_groups_in_charge(prontos_collection = MongoClient().prontosdb.prontos_collection):
+def get_encoded_gic(prontos_collection = MongoClient().prontosdb.prontos_collection):
     groupsInCharge = []
     for pronto in prontos_collection.find({}):
-        groupsInCharge.append(pronto["groupInCharge"])
+        groupsInCharge.append(pronto["groupInCharge"].split('_', 1)[0])
     
     le = preprocessing.LabelEncoder()
-    le.fit(groupsInCharge)
+    return le.fit_transform(groupsInCharge)
 
-    return le
+
+# def label_encode_gic(prontos_collection = MongoClient().prontosdb.prontos_collection):
+#     gic_list = []
+#     cursor = prontos_collection.find({})
+#     for document in cursor:
+#         gic = document['groupInCharge'].split('_',1)[0]
+#         print(gic)
+#         if (gic != 'MANO' and gic !='BOAM'):
+#             print("T")
+#             gic_list.append('not_boam')
+#         else:
+#             print("F")
+#             if gic == 'MANO':
+#                 gic_list.append('BOAM')
+#             else:
+#                 gic_list.append(gic)            
+#     for gic in set(gic_list):
+#         print(gic)
+#     label_encoder = preprocessing.LabelEncoder()
+#     encoded_gic = label_encoder.fit_transform(gic_list)
+#     return encoded_gic
+
+title_desc_vec = get_title_desc_vector()
+gic = get_encoded_gic()
+x_train, x_test, y_train, y_test = train_test_split(title_desc_vec.toarray(), gic, test_size=0.3)
+gnb = GaussianNB()
+y_pred = gnb.fit(x_train, y_train).predict(x_test)
+print("Number of mislabeled points out of a total %d points : %d"
+           % (x_test.shape[0], (y_test != y_pred).sum()))
+
