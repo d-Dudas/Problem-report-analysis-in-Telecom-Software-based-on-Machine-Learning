@@ -4,6 +4,11 @@ import TfidfVector
 from sklearn.feature_extraction import DictVectorizer
 import scipy.sparse as sp
 from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+import numpy as np
+from sklearn.impute import SimpleImputer
+
 
 def get_tokenized_title_and_description(prontos_collection = MongoClient().prontosdb.prontos_collection):
     tokenized_titles_descriptions = []
@@ -41,10 +46,11 @@ def get_useful_features_dict(prontos_collection = MongoClient().prontosdb.pronto
     useful_features = vectorizer.fit_transform(data_list)
     return useful_features
 
-# Return the concatenated features
+# Return the concatenated features and eliminate all NaN elements from it
 def get_concatenated_features():
-    return sp.hstack([get_title_desc_vector(),
-                      get_useful_features_dict()])
+    imputer=SimpleImputer(missing_values=np.nan, strategy='mean')
+    return imputer.fit_transform(sp.hstack([get_title_desc_vector(),
+                      get_useful_features_dict()]))
 
 # Turns groups in charge into numbered fields
 def get_encoded_groups_in_charge(prontos_collection = MongoClient().prontosdb.prontos_collection):
@@ -52,7 +58,32 @@ def get_encoded_groups_in_charge(prontos_collection = MongoClient().prontosdb.pr
     for pronto in prontos_collection.find({}):
         groupsInCharge.append(pronto["groupInCharge"])
     
+
     le = preprocessing.LabelEncoder()
-    le.fit(groupsInCharge)
+    le.fit_transform(groupsInCharge)
 
     return le
+
+#Get the data used for testing
+def get_tested_data(prontos_collection = MongoClient().prontosdb.prontos_collection):
+    state_data=[]
+    for pronto in prontos_collection.find({}):
+        state_data.append(pronto["state"])
+    le=preprocessing.LabelEncoder()
+    #transform le from Label to 1D array
+    return le.fit_transform(state_data)
+
+#train the ml-algorithm whitch uses the Gaussian approach
+def train_ml(clf=GaussianNb(),x=get_concatenated_features(),y=get_tested_data):
+    clf.fit(x,y)
+    return clf
+
+
+"""
+x=get_concatenated_features().toarray()
+y=get_tested_data()
+clf=train_ml(x,y)
+
+y_pred=clf.predict([x[0]])
+y_test=[y[0]]
+print(accuracy_score(y_test,y_pred))"""
