@@ -5,7 +5,7 @@ from sklearn.feature_extraction import DictVectorizer
 import scipy.sparse as sp
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import MultinomialNB
 
 def get_tokenized_title_and_description(prontos_collection = MongoClient().prontosdb.prontos_collection):
     tokenized_titles_descriptions = []
@@ -55,56 +55,22 @@ def get_encoded_gic(prontos_collection = MongoClient().prontosdb.prontos_collect
     le = preprocessing.LabelEncoder()
     return le.fit_transform(groupsInCharge)
 
-
-def label_encode_gic(prontos_collection = MongoClient().prontosdb.prontos_collection):
-    gic_list = []
-    cursor = prontos_collection.find({})
-    for document in cursor:
-         gic = document['groupInCharge'].split('_',1)[0]
-         print(gic)
-         if (gic != 'MANO' and gic !='BOAM'):
-             print("T")
-             gic_list.append('not_boam')
-         else:
-             print("F")
-             if gic == 'MANO':
-                 gic_list.append('BOAM')
-             else:
-                 gic_list.append(gic)            
-    for gic in set(gic_list):
-         print(gic)
-    label_encoder = preprocessing.LabelEncoder()
-    encoded_gic = label_encoder.fit_transform(gic_list)
-    return encoded_gic
-
 def get_encoded_state(prontos_collection = MongoClient().prontosdb.prontos_collection):
     state_list=[]
     for pronto in prontos_collection.find({}):
-       state_list.append(pronto["state"].split('_', 1)[0])
+       state_list.append(pronto["state"])
     
     le = preprocessing.LabelEncoder()
     return le.fit_transform(state_list)
 
 title_desc_vec = get_title_desc_vector()
-gic = get_encoded_state()
-x_train, x_test, y_train, y_test = train_test_split(title_desc_vec.toarray(), gic, test_size=0.3)
+enc_states = get_encoded_state()
+# Split the data into train and test
+x_train, x_test, y_train, y_test = train_test_split(title_desc_vec.toarray(), enc_states, test_size = 0.3)
 
-#Gaussian Naive Bayes
-"""gnb = GaussianNB()
-gnb.fit(x_train, y_train)
-accuracy=gnb.score(x_test,y_test)
-"""
-
-#Multinomial Naive Bayes
-#it has better accuracy for us
-from sklearn.naive_bayes import MultinomialNB
-clf = MultinomialNB()
-clf.fit(x_train, y_train)
-accuracy=clf.score(x_test,y_test)
-
-
-
+# MultinomialNB for accuracy
+mnb = MultinomialNB()
+mnb.fit(x_train, y_train)
+accuracy = mnb.score(x_test, y_test)
 
 print("Accuracy: {}".format(accuracy))
-"""print("Number of mislabeled points out of a total %d points : %d"
-           % (x_test.shape[0], (y_test != y_pred).sum()))"""
