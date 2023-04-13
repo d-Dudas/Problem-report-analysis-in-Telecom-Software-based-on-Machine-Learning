@@ -2,7 +2,7 @@ import nltk
 from pymongo import MongoClient
 
 # Get each pronto's description and tokenize it
-def get_tokenized_prontos_descriptions(prontos_collection = MongoClient().prontosdb.prontos_collection):
+def get_tokenized_descriptions(prontos_collection = MongoClient().prontosdb.prontos_collection):
     # The tokenized descriptions are stored in the following array
     tokenized_prontos_descriptions = []
     for pronto in prontos_collection.find({}):
