@@ -1,15 +1,31 @@
 import nltk
-from pymongo import MongoClient
+import read_data_from_db as rdb
+import scipy.sparse as sp
+from sklearn import preprocessing
+from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-# Get each pronto's description and tokenize it
-def get_tokenized_prontos_descriptions(prontos_collection = MongoClient().prontosdb.prontos_collection):
-    # The tokenized descriptions are stored in the following array
-    tokenized_prontos_descriptions = []
-    for pronto in prontos_collection.find({}):
-        tokenized_prontos_descriptions.append(nltk.word_tokenize(pronto["description"]))
-    
-    return tokenized_prontos_descriptions
+def get_title_desc_vector():
+    return get_tfidfVector(
+            get_rejoined_processed_tokens(
+                get_stemmed_tokens(
+                    get_filtered_tokens(
+                        rdb.get_tokenized_title_and_description()
+                    )
+                )
+            )
+        )
+
+def get_dict_vector(data_list):
+    return DictVectorizer(sparse=True).fit_transform(data_list)
+
+def get_concatenated_features():
+    useful_features_dict = get_dict_vector(rdb.get_useful_features_list())
+    return sp.hstack([get_title_desc_vector(),
+                      useful_features_dict])
+
+def get_encoded_data(data):
+    return preprocessing.LabelEncoder().fit_transform(data)
 
 #Filter and keep only the words that are in the english dictionary
 def get_filtered_tokens(tokenized_descriptions):
@@ -50,15 +66,3 @@ def get_rejoined_processed_tokens(tokens_list):
 def get_tfidfVector(stemmed_text):
     # Vectorize the stemmed text
     return TfidfVectorizer(stop_words='english').fit_transform(stemmed_text)
-
-# tokenized_descriptions = get_tokenized_prontos_descriptions()
-# print("Tokens ready")
-# tokenized_descriptions = get_filtered_tokens(tokenized_descriptions)
-# print("Filtered")
-# stemmed_tokens = get_stemmed_tokens(tokenized_descriptions)
-# print("Stemmed.")
-# stemmed_text = get_rejoined_processed_tokens(stemmed_tokens)
-# print("Rejoined")
-# matrix = get_tfidfVector(stemmed_text)
-
-# print("Matrix shape: {}".format(matrix.shape))
