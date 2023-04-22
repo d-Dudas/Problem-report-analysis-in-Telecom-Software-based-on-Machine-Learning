@@ -1,0 +1,19 @@
+.newPronto-form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+}
+
+.newPronto-text-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.newPronto-text-label-input{
+    height: 1vh;
+}
