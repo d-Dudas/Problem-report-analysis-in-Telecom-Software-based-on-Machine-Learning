@@ -1,0 +1,25 @@
+.homePage-div {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+
+.newProntoButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 10vw;
+    height: 5vh;
+
+    background: none;
+
+    border-radius: 25px;
+
+    transition: 0.5s;
+}
+
+.newProntoButton:hover {
+    background-color: rgb(230, 230, 230);
+}

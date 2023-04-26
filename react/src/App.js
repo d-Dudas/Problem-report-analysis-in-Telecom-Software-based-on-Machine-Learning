@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import HomePage from "./HomePage";
+import NewPronto from "./newPronto";
+import Result from "./Result";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    fetch('/api/data')
-      .then(response => response.json())
-      .then(data => setData(data));
-  }, []);
+  const [formData, setFormData] = useState({
+    titlu: '',
+    descriere: '',
+    feature: '',
+    gic: '',
+    release: ''
+  });
 
   return (
-    <div>
-      <h1>{data.message}</h1>
-      <p>{data.msg}</p>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<NewPronto formData={formData} setFormData={setFormData} />} />
+        <Route path="/result" element={<Result formData={formData} />} />
+      </Routes>
+    </Router>
   );
 }
 

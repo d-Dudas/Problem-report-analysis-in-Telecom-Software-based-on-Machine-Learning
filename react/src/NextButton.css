@@ -1,0 +1,14 @@
+.button {
+    height: 4vmax;
+    min-width: 4vmax;
+    border-radius: 50%;
+    border: none;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #44a8ff 0%, rgba(0,47,255,0.76) 100%);
+    background-blend-mode: normal;
+    color: white;
+    box-shadow: -5px 8px 5px rgba(0, 0, 0, 0.425);
+}
