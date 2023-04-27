@@ -15,7 +15,7 @@ function Result({formData}){
                 <h1>Current form data:</h1>
                 <p>Titlu: {formData.titlu}</p>
                 <p>Feature: {formData.feature}</p>
-                <p>Release: {formData.Release}</p>
+                <p>Release: {formData.release}</p>
                 <p>Gic: {formData.gic}</p>
                 <p>Descriere: {formData.descriere}</p>
             </div>
