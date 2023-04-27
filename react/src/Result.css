@@ -1,4 +1,9 @@
 .result-div {
-    position: absolute;
-    top: 10%;
+    width: 100%;
+    min-height: 100%;
+    padding: 1vh 1vw;
+}
+
+.result-div p {
+    font-size: 1.5rem;
 }

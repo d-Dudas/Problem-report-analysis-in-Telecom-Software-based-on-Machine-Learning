@@ -7,7 +7,9 @@ function MainDiv(props) {
             <div className='main-header-div'>
                 <h1 className='main-header-text'>{props.headerText}</h1>
             </div>
-            {props.children}
+            <div className="main-content-div">
+                {props.children}
+            </div>
         </div>
     );
 }

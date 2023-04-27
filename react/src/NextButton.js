@@ -5,7 +5,7 @@ const delay = ms => new Promise(
   resolve => setTimeout(resolve, ms)
 );
 
-function NextButton({placeholder, text, type, onClick}) {
+function NextButton({placeholder, text, onClick}) {
 
     const [visibleText, setText] = useState(placeholder);
 
@@ -25,7 +25,7 @@ function NextButton({placeholder, text, type, onClick}) {
                 borderRadius: "40px",
                 padding: "20px 20px",
                 transition: "0.5s",
-                width: text.length*1.75 + "vmax"
+                width: (text.length + 2) + "ch"
             });
             await delay(300);
             let aux = text[0]
@@ -58,7 +58,6 @@ function NextButton({placeholder, text, type, onClick}) {
             onMouseEnter={handleHover}
             onMouseLeave={handleHover}
             style={style}
-            type={type}
             onClick={onClick}
         >
             {visibleText}

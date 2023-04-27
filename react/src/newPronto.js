@@ -1,8 +1,11 @@
-import { useNavigate } from 'react-router-dom';
 import "./newPronto.css";
+import 'react-quill/dist/quill.snow.css';
+import MainDiv from './MainDiv';
+import ReactQuill from 'react-quill';
 import Background from './Background';
 import NextButton from './NextButton';
-import MainDiv from './MainDiv';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function NewPronto({formData, setFormData}) {
 
@@ -10,6 +13,8 @@ function NewPronto({formData, setFormData}) {
       const { name, value } = event.target;
       setFormData({ ...formData, [name]: value });
     };
+
+    const [descriere, setDescriere] = useState(formData.descriere);
 
     function sendDataToFlask() {
       fetch('/receive-data', {
@@ -25,13 +30,8 @@ function NewPronto({formData, setFormData}) {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      sendDataToFlask();
-      navigate('/result');
-    };
-
     function submitForm() {
+      formData.descriere = descriere;
       sendDataToFlask();
       navigate('/result');
     }
@@ -39,33 +39,31 @@ function NewPronto({formData, setFormData}) {
     return (
       <div>
         <Background />
-        <div className='header'></div>
         <MainDiv headerText="Upload new pronto">
-          <form className='newPronto-form' onSubmit={handleSubmit}>
+          <form className='newPronto-form'>
               <label className='newPronto-text-label'>
-                  <p>Titlu: </p>
-                  <input className='newPronto-text-label-input' type = "text" name = "titlu" value={formData.titlu} onChange={handleChange} ></input>
+                  <p>Titlu</p>
+                  <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "titlu" value={formData.titlu} onChange={handleChange} ></input>
               </label>
               <label className='newPronto-text-label'>
-                  <p>Feature: </p>
-                  <input className='newPronto-text-label-input' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
+                  <p>Feature</p>
+                  <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
               </label>
               <label className='newPronto-text-label'>
-                  <p>Group in charge: </p>
-                  <input className='newPronto-text-label-input' type = "text" name = "gic" value={formData.gic} onChange={handleChange}></input>
+                  <p>Group in charge</p>
+                  <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "gic" value={formData.gic} onChange={handleChange}></input>
               </label>
               <label className='newPronto-text-label'>
-                  <p>Release: </p>
-                  <input className='newPronto-text-label-input' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
+                  <p>Release</p>
+                  <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
               </label>
               <label className='newPronto-text-label'>
-                  <p>Descriere: </p>
-                  <textarea className='newPronto-descriere newPronto-text-label-input' rows={10} name = "descriere" value={formData.descriere} onChange={handleChange}></textarea>
+                  <p>Descriere</p>
+                  <ReactQuill placeholder='Descriere' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
               </label>
           </form>
         </MainDiv>
-        <NextButton placeholder={">"} text={"Continue"} type={"submit"} onClick = {submitForm}/>
-        <div className='footer'></div>
+        <NextButton placeholder={">"} text={"Continue"} onClick = {submitForm}/>
       </div>
     );
   }

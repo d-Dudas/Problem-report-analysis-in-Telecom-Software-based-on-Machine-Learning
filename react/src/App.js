@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import HomePage from "./HomePage";
 import NewPronto from "./newPronto";
 import Result from "./Result";
 import 'bootstrap/dist/css/bootstrap.min.css';

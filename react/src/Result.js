@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import './newPronto.css';
 import "./Result.css";
+import MainDiv from './MainDiv';
+import parse from 'html-react-parser'
 import Background from './Background';
 import NextButton from './NextButton';
-import MainDiv from './MainDiv';
+import { useNavigate } from 'react-router-dom';
 
 function Result({formData}){
     const navigate = useNavigate();
@@ -19,12 +20,11 @@ function Result({formData}){
         <div className='header'></div>
         <MainDiv headerText={"Prediction"}>
             <div className='result-div'>
-                <h1>Current form data:</h1>
-                <p>Titlu: {formData.titlu}</p>
-                <p>Feature: {formData.feature}</p>
-                <p>Release: {formData.release}</p>
-                <p>Gic: {formData.gic}</p>
-                <p>Descriere: {formData.descriere}</p>
+                <p><strong>Titlu:</strong> {formData.titlu}</p>
+                <p><strong>Feature:</strong> {formData.feature}</p>
+                <p><strong>Release:</strong> {formData.release}</p>
+                <p><strong>Gic:</strong> {formData.gic}</p>
+                <p><strong>Descriere:</strong></p>{parse(formData.descriere)}
             </div>
         </MainDiv>
         <NextButton placeholder={"<"} text={"Back"} type={"submit"} onClick = {switchPage}/>
