@@ -39,12 +39,12 @@
     min-height: 15vh;
 }
 
-.button {
+/* .button {
     position: absolute;
     bottom: 5vh;
     left: 70vw;
     transition: 0.5s;
-}
+} */
 
 input:focus {
     outline: none;

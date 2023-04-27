@@ -4,7 +4,7 @@ import MainDiv from './MainDiv';
 import ReactQuill from 'react-quill';
 import Background from './Background';
 import NextButton from './NextButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function NewPronto({formData, setFormData}) {
@@ -36,6 +36,12 @@ function NewPronto({formData, setFormData}) {
       navigate('/result');
     }
 
+    const [left, setLeft] = useState("120vw");
+
+    useEffect(() => {
+      setLeft("70vw");
+    }, []);
+
     return (
       <div>
         <Background />
@@ -63,7 +69,9 @@ function NewPronto({formData, setFormData}) {
               </label>
           </form>
         </MainDiv>
-        <NextButton placeholder={">"} text={"Continue"} onClick = {submitForm}/>
+        <div style={{left: left, transition: "1s ease", bottom: "5vh", position: "absolute"}}>
+          <NextButton placeholder={">"} text={"Continue"} onClick = {submitForm}/>
+        </div>
       </div>
     );
   }

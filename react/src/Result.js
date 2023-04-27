@@ -5,6 +5,7 @@ import parse from 'html-react-parser'
 import Background from './Background';
 import NextButton from './NextButton';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect} from 'react';
 
 function Result({formData}){
     const navigate = useNavigate();
@@ -13,6 +14,12 @@ function Result({formData}){
     {  
       navigate('/');
     }
+
+    const [left, setLeft] = useState("120vw");
+
+    useEffect(() => {
+      setLeft("70vw");
+    }, []);
 
     return(
         <div>
@@ -27,7 +34,9 @@ function Result({formData}){
                 <p><strong>Descriere:</strong></p>{parse(formData.descriere)}
             </div>
         </MainDiv>
-        <NextButton placeholder={"<"} text={"Back"} type={"submit"} onClick = {switchPage}/>
+        <div style={{left: left, transition: "1s ease", bottom: "5vh", position: "absolute"}}>
+          <NextButton placeholder={"<"} text={"Back"} type={"submit"} onClick = {switchPage}/>
+        </div>
         <div className='footer'></div>
       </div>
     );
