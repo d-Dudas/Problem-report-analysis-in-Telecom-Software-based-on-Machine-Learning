@@ -1,5 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './newPronto.css';
+import "./Result.css";
+import Background from './Background';
+import NextButton from './NextButton';
+import MainDiv from './MainDiv';
 
 function Result({formData}){
     const navigate = useNavigate();
@@ -10,8 +14,11 @@ function Result({formData}){
     }
 
     return(
-        <div className='d-flex justify-content-center align-items-center'>
-            <div>
+        <div>
+        <Background />
+        <div className='header'></div>
+        <MainDiv headerText={"Prediction"}>
+            <div className='result-div'>
                 <h1>Current form data:</h1>
                 <p>Titlu: {formData.titlu}</p>
                 <p>Feature: {formData.feature}</p>
@@ -19,8 +26,10 @@ function Result({formData}){
                 <p>Gic: {formData.gic}</p>
                 <p>Descriere: {formData.descriere}</p>
             </div>
-            <button onClick={switchPage}>Home</button>
-        </div>
+        </MainDiv>
+        <NextButton placeholder={"<"} text={"Back"} type={"submit"} onClick = {switchPage}/>
+        <div className='footer'></div>
+      </div>
     );
 }
 
