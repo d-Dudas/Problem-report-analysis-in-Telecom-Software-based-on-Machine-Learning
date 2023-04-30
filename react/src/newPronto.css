@@ -3,6 +3,12 @@
     --right-blue: 0, 47, 255;
 }
 
+.newPronto-div {
+    position: absolute;
+    width: 35vw;
+    left: 40vw;
+}
+
 .newPronto-form {
     display: flex;
     flex-direction: column;

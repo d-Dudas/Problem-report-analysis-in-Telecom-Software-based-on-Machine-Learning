@@ -46,7 +46,7 @@ function NextButton({placeholder, text, onClick}) {
       }
     
       async function resetText() {
-        let aux = text;
+        let aux = visibleText;
         for (let i = 1; i <= text.length; i++) {
           setText(aux);
           aux = aux.slice(0, aux.length - 1);

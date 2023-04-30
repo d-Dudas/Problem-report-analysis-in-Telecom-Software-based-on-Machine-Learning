@@ -5,6 +5,7 @@ import Result from "./Result";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Background from './Background';
 import Dashboard from './Dashboard';
+import UploadPage from './UploadPage';
 
 function App() {
 
@@ -19,20 +20,20 @@ function App() {
 
   const pages = [
     {
-      key: 'form',
+      key: '/',
       name: 'Pronto form',
       subpages: []
     },
     {
-      key: 'upload',
+      key: '/upload',
       name: 'Upload pronto',
       subpages: [
         {
-          key: 'title1',
+          key: '/',
           name: 'Title 1 ana are mere si alte chestii foarte interesante'
         },
         {
-          key: 'title2',
+          key: '/',
           name: 'Title 2 ana are'
         }
       ]
@@ -44,11 +45,13 @@ function App() {
   return (
     <>
       <Background />
-      <Dashboard pages={pages} pkey={pkey}/>
       <Router>
+        <Dashboard pages={pages} pkey={pkey}/>
         <Routes>
           <Route path="/" element={<NewPronto formData={formData} setFormData={setFormData} setKey={setKey} />} />
-          <Route path="/result" element={<Result formData={formData} setKey={setKey} />} />
+          <Route path="/form-result" element={<Result formData={formData} setKey={setKey} />} />
+          <Route path="/upload" element={<UploadPage setKey={setKey} />} />
+          {/* <Route path="/upload-result" element={<Result formData={formData} setKey={setKey} />} /> */}
         </Routes>
       </Router>
     </>

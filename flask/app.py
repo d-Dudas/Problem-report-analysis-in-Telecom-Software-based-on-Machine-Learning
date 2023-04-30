@@ -11,8 +11,11 @@ def get_data():
 def receive_data():
     data = request.json
     print(data)
+    data = {'msg': 'Ana are mere'}
+    import time
+    time.sleep(3)
     # Do something with the data
-    return({})
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run()

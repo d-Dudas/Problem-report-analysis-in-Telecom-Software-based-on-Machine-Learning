@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function NewPronto({formData, setFormData, setKey}) {
 
-  setKey('form');
+  setKey('/');
 
     function sendDataToFlask() {
       fetch('/receive-data', {
@@ -37,12 +37,12 @@ function NewPronto({formData, setFormData, setKey}) {
     function submitForm() {
       formData.descriere = descriere;
       formData.state = "abc";
-      if(Object.keys(formData).filter(key => key != "state").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
+      if(Object.keys(formData).filter(key => key !== "state").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
         console.log("Nem jo.");
       } else {
         formData.state = '';
         sendDataToFlask();
-        navigate('/result');
+        navigate('/form-result');
       }
     }
 
@@ -51,35 +51,37 @@ function NewPronto({formData, setFormData, setKey}) {
 
     // When page starts, put the element on place
     useEffect(() => {
-      setLeft("70vw");
+      setLeft("77vw");
     }, []);
 
     return (
       <div>
-        <MainDiv headerText="Upload new pronto">
-          <form className='newPronto-form'>
-              <label className='newPronto-text-label'>
-                  <p>Titlu</p>
-                  <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "titlu" value={formData.titlu} onChange={handleChange} ></input>
-              </label>
-              <label className='newPronto-text-label'>
-                  <p>Feature</p>
-                  <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
-              </label>
-              <label className='newPronto-text-label'>
-                  <p>Group in charge</p>
-                  <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "gic" value={formData.gic} onChange={handleChange}></input>
-              </label>
-              <label className='newPronto-text-label'>
-                  <p>Release</p>
-                  <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
-              </label>
-              <label className='newPronto-text-label'>
-                  <p>Descriere</p>
-                  <ReactQuill placeholder='Descriere' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
-              </label>
-          </form>
-        </MainDiv>
+        <div class='newPronto-div'>
+          <MainDiv headerText="Upload new pronto">
+            <form className='newPronto-form'>
+                <label className='newPronto-text-label'>
+                    <p>Titlu</p>
+                    <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "titlu" value={formData.titlu} onChange={handleChange} ></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Feature</p>
+                    <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Group in charge</p>
+                    <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "gic" value={formData.gic} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Release</p>
+                    <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Descriere</p>
+                    <ReactQuill placeholder='Descriere' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
+                </label>
+            </form>
+          </MainDiv>
+        </div>
         <div style={{left: left, transition: "1s ease", bottom: "5vh", position: "absolute"}}>
           <NextButton placeholder={">"} text={"Continue"} onClick = {submitForm}/>
         </div>

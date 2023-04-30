@@ -1,10 +1,13 @@
 import './Dashboard.css';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard({pages, pkey}) {
 
+    const navigate = useNavigate();
+
     function handleClick(event) {
-        const xkey = event.target.closest('.dashboard-item').getAttribute('pkey');
-        console.log(xkey);
+        const path = event.target.closest('div').getAttribute('pkey');
+        navigate(path);
     };
 
     const dashboardItems = pages.map(item => (
@@ -13,7 +16,7 @@ function Dashboard({pages, pkey}) {
                 <p>{item.name}</p>
             </div>
             {item.subpages.map(subitem => (
-                <div className={pkey === subitem.key ? "dashboard-subitem opened" : "dashboard-subitem"} pkey={subitem.key}>
+                <div className={pkey === subitem.key ? "dashboard-subitem opened" : "dashboard-subitem"} pkey={subitem.key} onClick={handleClick}>
                     <p>{'- ' + subitem.name}</p>
                 </div>
             ))}

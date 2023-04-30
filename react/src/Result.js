@@ -9,7 +9,7 @@ import LoadingDots from './LoadingDots';
 
 function Result({formData, setKey}){
 
-  setKey('upload');
+  setKey('/upload');
 
     const navigate = useNavigate();
 
