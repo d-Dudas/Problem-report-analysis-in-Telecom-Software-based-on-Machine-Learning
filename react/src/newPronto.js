@@ -2,19 +2,13 @@ import "./newPronto.css";
 import 'react-quill/dist/quill.snow.css';
 import MainDiv from './MainDiv';
 import ReactQuill from 'react-quill';
-import Background from './Background';
 import NextButton from './NextButton';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function NewPronto({formData, setFormData}) {
+function NewPronto({formData, setFormData, setKey}) {
 
-    const handleChange = (event) => {
-      const { name, value } = event.target;
-      setFormData({ ...formData, [name]: value });
-    };
-
-    const [descriere, setDescriere] = useState(formData.descriere);
+  setKey('form');
 
     function sendDataToFlask() {
       fetch('/receive-data', {
@@ -25,26 +19,43 @@ function NewPronto({formData, setFormData}) {
         body: JSON.stringify(formData)
       })
       .then(response => response.json())
+      .then(data => {
+        setFormData({ ...formData, state: data.msg });
+      })
       .catch(error => console.error(error));
     }
+    
+    const handleChange = (event) => {
+      const { name, value } = event.target;
+      setFormData({ ...formData, [name]: value });
+    };
+
+    const [descriere, setDescriere] = useState(formData.descriere);
 
     const navigate = useNavigate();
 
     function submitForm() {
       formData.descriere = descriere;
-      sendDataToFlask();
-      navigate('/result');
+      formData.state = "abc";
+      if(Object.keys(formData).filter(key => key != "state").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
+        console.log("Nem jo.");
+      } else {
+        formData.state = '';
+        sendDataToFlask();
+        navigate('/result');
+      }
     }
 
+    // By default, put the element out of the screen
     const [left, setLeft] = useState("120vw");
 
+    // When page starts, put the element on place
     useEffect(() => {
       setLeft("70vw");
     }, []);
 
     return (
       <div>
-        <Background />
         <MainDiv headerText="Upload new pronto">
           <form className='newPronto-form'>
               <label className='newPronto-text-label'>

@@ -3,6 +3,9 @@
     --right-blue: 0, 47, 255;
     --header-height: 8vh;
     --footer-height: 2vh;
+    --linear-gradient-full-visible: linear-gradient(90deg,
+                                    rgba(var(--left-blue), 0.5) 0%,
+                                    rgba(var(--right-blue)) 100%);
 }
 
 .background {
@@ -20,6 +23,7 @@
                  rgba(var(--left-blue), 0.5) 0%,
                  rgba(var(--right-blue)) 100%);
     z-index: 10;
+    box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.4);
 }
 
 .background-object {

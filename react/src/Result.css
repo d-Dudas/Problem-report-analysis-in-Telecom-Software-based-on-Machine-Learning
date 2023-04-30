@@ -7,3 +7,13 @@
 .result-div p {
     font-size: 1.5rem;
 }
+
+.result {
+    display: flex;
+    flex-direction: row;
+}
+
+.result p {
+    margin-right: 1rem;
+}
+

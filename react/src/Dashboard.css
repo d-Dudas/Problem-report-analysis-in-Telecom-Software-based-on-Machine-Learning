@@ -1,0 +1,68 @@
+.dashboard-body {
+    position: absolute;
+    top: var(--header-height);
+    width: 18vw;
+    height: calc(100vh - var(--header-height) - var(--footer-height));
+    background: linear-gradient(135deg,
+                                rgb(var(--left-blue)) 0%,
+                                rgba(var(--right-blue),0.6) 100%);
+    background-blend-mode: normal;
+}
+
+.dashboard-header {
+    position: absolute;
+    width: 100%;
+    height: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    border-bottom: 1px solid white;
+}
+
+.dashboard-items {
+    position: absolute;
+    top: 12%;
+    width: 100%;
+    height: 100% - 12%;
+    overflow-y: scroll;
+}
+
+.dashboard-item, .dashboard-subitem {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    overflow: hidden;
+}
+
+.dashboard-item p, .dashboard-subitem p {
+    margin: 0px 0px 0px 5%;
+    width: 90%;
+    color: white;
+    font-size: 1.2rem;
+    background: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 5vh;
+}
+
+.dashboard-subitem p {
+    width: 85%;
+    font-size: 1rem;
+    margin-left: 10%;
+}
+
+.dashboard-item:hover, .dashboard-subitem:hover {
+    background: rgba(255, 255, 255, 0.1);
+    background-blend-mode: normal;
+    cursor: pointer;
+}
+
+.opened {
+    background: rgba(0, 0, 0, 0.1);
+    background-blend-mode: normal;
+    cursor: pointer;    
+}
