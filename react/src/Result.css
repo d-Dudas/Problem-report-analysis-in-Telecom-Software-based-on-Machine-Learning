@@ -17,3 +17,39 @@
     margin-right: 1rem;
 }
 
+.result-content {
+    position: absolute;
+    left: var(--dashboard-width);
+    width: calc(100vw - var(--dashboard-width));
+}
+
+.main-div-result {
+    position: absolute;
+    left: 5vw;
+    width: 35vw;
+    transition: 1s;
+}
+
+.save-pronto-div {
+    position: absolute;
+    width: 25vw;
+    left: 50vw;
+}
+
+.d-chart {
+    position: absolute;
+    width: 100%;
+    top: 15%;
+}
+
+.accuracy-text1 {
+    position: absolute;
+    width: 80%;
+    height: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    z-index: 5;
+    text-align: center;
+    top: 2%;
+}

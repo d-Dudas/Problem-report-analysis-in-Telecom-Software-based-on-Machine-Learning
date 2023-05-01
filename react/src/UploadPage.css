@@ -1,7 +1,22 @@
+.upload-page-content {
+    position: absolute;
+    left: var(--dashboard-width);
+    width: calc(100vw - var(--dashboard-width));
+}
+
 .dropzone-div {
     position: absolute;
-    left: 25vw;
+    left: 7vw;
     width: 35vw;
+    transition: 1s;
+}
+
+.dropzone-div-alone {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35vw;
+    transition: 1s;
 }
 
 .dropzone {
@@ -43,20 +58,23 @@
 
 .files {
     position: absolute;
-    left: 70vw;
+    left: 50vw;
     width: 25vw;
+    transition: 1s;
 }
 
 .files-list {
     position: absolute;
-    top: 5%;
+    padding-top: 5%;
     width: 100%;
-    height: 95%;
+    height: 85%;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: scroll;
     column-gap: 1vh;
+    /* border-bottom: 1px dashed grey; */
+    box-shadow: inset 0px -5px 5px rgba(0, 0, 0, 0.308);
 }
 
 .uploaded-file-div {
@@ -64,11 +82,26 @@
     height: 8vh;
     margin: 1.5vh 0px;
     border-radius: 20px;
-    background: linear-gradient(90deg, #44a8ff 0%, #ffffff 100%);
+    background: linear-gradient(90deg, #dff0ff 0%, #ffffff 100%);
     background-blend-mode: normal;
     display: flex;
     flex-direction: row;
     align-items: center;
+    box-shadow: -5px 5px 6px rgba(0, 0, 0, 0.342),
+                5px 5px 6px rgba(0, 0, 0, 0.342);
+    animation-name: fade-in;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .uploaded-file-logo {
@@ -78,13 +111,26 @@
 }
 
 .uploaded-file-text {
-    color: white;
+    color: rgb(90, 90, 90);
     font-size: 1.5rem;
-    width: 80%;
+    width: 70%;
     margin: 0px;
 }
 
 .uploaded-file-close {
     cursor: pointer;
     height: 4vh;
+    transition: 0.2s;
+}
+
+.uploaded-file-close:hover {
+    height: 5vh;
+    transform: translateX(-10%);
+}
+
+.upload-files-button {
+    position: absolute;
+    top: 87%;
+    left: 50%;
+    transform: translateX(-50%);
 }

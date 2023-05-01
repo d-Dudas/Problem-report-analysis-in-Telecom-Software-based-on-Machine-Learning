@@ -1,15 +1,18 @@
 import './UploadPage.css';
-import fileLogo from './images/File.png';
+import fileLogo from './images/json-logo.png';
 import close from './images/Close.png';
 import MainDiv from './MainDiv';
 import uploadicon from './images/upload-icon.png';
 import { useRef, useState } from 'react';
+import NextButton from './NextButton';
+import { Navigate, useNavigate } from 'react-router-dom';
 
-function UploadPage({setKey}) {
+function UploadPage({setKey, dashboard_content, setDash, setProntoList}) {
 
     setKey('/upload');
 
     const inputRef = useRef(null);
+    const navigate = useNavigate();
     const [uploadedFiles, uploadFile] = useState([]);
 
     function handleDragOver(event) {
@@ -50,9 +53,42 @@ function UploadPage({setKey}) {
           })
     }
 
+    function setSubpages(data) {
+        setProntoList(data)
+        let subpages = []
+        for(let i = 0; i < data.length; i++) {
+            let key = "/" + data[i].problemReportId;
+            let name = data[i].problemReportId;
+            subpages.push({key: key, name: name})
+        }
+        dashboard_content[1].subpages = subpages;
+        console.log(dashboard_content);
+        setDash(dashboard_content);
+        navigate('/' + data[0].problemReportId);
+    }
+
+    async function uploadFiles() {
+        const formData = new FormData();
+        for(let i = 0; i < uploadedFiles.length; i++){
+            formData.append('files[]', uploadedFiles[i]);
+        }
+
+        try {
+            const response = await fetch('/receive-files', {
+              method: 'POST',
+              body: formData,
+            });
+            const data = await response.json();
+            console.log(data);
+            setSubpages(data);
+          } catch (error) {
+            console.error(error);
+          }
+    }
+
     return(
-        <>
-            <div className='dropzone-div'>
+        <div className='upload-page-content'>
+            <div className={uploadedFiles.length > 0 ? 'dropzone-div' : 'dropzone-div-alone'}>
                 <MainDiv headerText="Upload new pronto">
                     <div 
                         className='dropzone'
@@ -87,11 +123,14 @@ function UploadPage({setKey}) {
                                         )
                                 })}
                             </div>
+                            <div className='upload-files-button'>
+                                <NextButton placeholder={">"} text={"Upload"} onClick={uploadFiles}/>
+                            </div>
                         </MainDiv>
                     </div>
                 )
             }
-        </>
+        </div>
     )
 }
 

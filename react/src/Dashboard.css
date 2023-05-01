@@ -1,7 +1,7 @@
 .dashboard-body {
     position: absolute;
     top: var(--header-height);
-    width: 18vw;
+    width: var(--dashboard-width);
     height: calc(100vh - var(--header-height) - var(--footer-height));
     background: linear-gradient(135deg,
                                 rgb(var(--left-blue)) 0%,

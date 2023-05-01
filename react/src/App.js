@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Background from './Background';
 import Dashboard from './Dashboard';
 import UploadPage from './UploadPage';
+import './variables.css';
 
 function App() {
 
@@ -18,7 +19,9 @@ function App() {
     state: ''
   });
 
-  const pages = [
+  const [prontoList, setProntoList] = useState([])
+
+  const [pages, setPages] = useState([
     {
       key: '/',
       name: 'Pronto form',
@@ -27,18 +30,9 @@ function App() {
     {
       key: '/upload',
       name: 'Upload pronto',
-      subpages: [
-        {
-          key: '/',
-          name: 'Title 1 ana are mere si alte chestii foarte interesante'
-        },
-        {
-          key: '/',
-          name: 'Title 2 ana are'
-        }
-      ]
+      subpages: []
     }
-  ];
+  ]);
 
   const [pkey, setKey] = useState('ana');
 
@@ -49,9 +43,11 @@ function App() {
         <Dashboard pages={pages} pkey={pkey}/>
         <Routes>
           <Route path="/" element={<NewPronto formData={formData} setFormData={setFormData} setKey={setKey} />} />
-          <Route path="/form-result" element={<Result formData={formData} setKey={setKey} />} />
-          <Route path="/upload" element={<UploadPage setKey={setKey} />} />
-          {/* <Route path="/upload-result" element={<Result formData={formData} setKey={setKey} />} /> */}
+          <Route path="/form-result" element={<Result formData={formData} setKey={setKey} pkey={"/"}/>} />
+          <Route path="/upload" element={<UploadPage setKey={setKey} dashboard_content={pages} setDash={setPages} setProntoList={setProntoList}/>} />
+          {prontoList.map(pronto => {
+            return(<Route path={"/" + pronto.problemReportId} element={<Result formData={pronto} setKey={setKey} pkey={"/" + pronto.problemReportId}/>} />);
+          })}
         </Routes>
       </Router>
     </>
