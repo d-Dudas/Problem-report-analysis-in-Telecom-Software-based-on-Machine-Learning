@@ -24,6 +24,16 @@
                  rgba(var(--right-blue)) 100%);
     z-index: 10;
     box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.4);
+    animation: background-header-animation 0.5s;
+}
+
+@keyframes background-header-animation {
+    from {
+        top: -10vh;
+    }
+    to {
+        top: 0px;
+    }
 }
 
 .background-object {

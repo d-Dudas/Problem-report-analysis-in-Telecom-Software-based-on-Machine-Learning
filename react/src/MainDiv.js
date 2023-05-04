@@ -3,8 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 
 function MainDiv(props) {
 
-    const [top, setTop] = useState("-100vh");
-
     const divRef = useRef(null);
 
     useEffect(() => {
@@ -12,12 +10,8 @@ function MainDiv(props) {
         divRef.current.scrollTop = divRef.current.scrollHeight;
     }, [divRef.current?.scrollHeight]);
 
-    useEffect(() => {
-        setTop("10vh");
-      }, []);
-
     return(
-        <div className='main-div' style={{top: top}}>
+        <div className='main-div'>
             <div className='main-header-div'>
                 <h1 className='main-header-text'>{props.headerText}</h1>
             </div>

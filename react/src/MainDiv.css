@@ -9,6 +9,19 @@
     background-color: white;
     border-radius: 20px;
     transition: all 1s ease;
+    animation: main-div-animation 1s;
+}
+
+@keyframes main-div-animation {
+    from {
+        top: -100vw;
+    }
+    75% {
+        top: 15vh;
+    }
+    to {
+        top: 10vh;
+    }
 }
 
 .main-content-div {

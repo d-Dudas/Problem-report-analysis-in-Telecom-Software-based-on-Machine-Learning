@@ -7,6 +7,16 @@
                                 rgb(var(--left-blue)) 0%,
                                 rgba(var(--right-blue),0.6) 100%);
     background-blend-mode: normal;
+    animation: dashboard-body-animation 0.5s;
+}
+
+@keyframes dashboard-body-animation {
+    from {
+        left: -100vw;
+    }
+    to {
+        left: 0vw;
+    }
 }
 
 .dashboard-header {

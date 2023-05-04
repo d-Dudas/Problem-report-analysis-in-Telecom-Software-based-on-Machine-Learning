@@ -29,6 +29,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     const auxProntoList = prontoList.slice();
     const [descriere, setDescriere] = useState(formData.descriere);
     const navigate = useNavigate();
+    const [error, setError] = useState(false);
 
     function sendDataToFlask() {
       fetch('/receive-data', {
@@ -65,7 +66,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     function submitForm() {
       formData.description = descriere;
       if(Object.keys(formData).filter(key => key !== "state" && key !== "saved").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
-        console.log("Nem jo.");
+        setError(true);
       } else {
         formData.state = '';
         sendDataToFlask();
@@ -82,6 +83,14 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
 
     return (
       <div>
+        {error ?
+          <div className="empty-fields-error-screen">
+            <div className="empty-fields-error-div">
+              <h1 className="empty-fields-error-text">You should complete every field</h1>
+              <button className="empty-fields-error-button" onClick={() => setError(false)}>Got it!</button>
+            </div>
+          </div> : <></>
+        }
         <div class='newPronto-div'>
           <MainDiv headerText="Upload new pronto">
             <form className='newPronto-form'>
