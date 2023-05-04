@@ -1,4 +1,7 @@
+// CSS files
 import "./NextButton.css";
+
+// React related
 import { useState, useEffect } from "react";
 
 function NextButton({placeholder, text, onClick}) {

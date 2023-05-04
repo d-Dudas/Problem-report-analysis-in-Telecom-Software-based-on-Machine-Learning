@@ -12,6 +12,16 @@ def get_data():
 def receive_data():
     data = request.json
     print(data)
+    data = create_pronto_object(data)
+    import time
+    time.sleep(3)
+    # Do something with the data
+    return jsonify(data)
+
+@app.route('/save-pronto', methods=['POST'])
+def save_pronto():
+    data = request.json
+    print(data)
     data = {'msg': 'Ana are mere'}
     import time
     time.sleep(3)
@@ -26,6 +36,7 @@ def create_pronto_object(file):
     gic = file['groupInCharge']
     descriere = file['description']
     state = 'Ana are mere'
+    saved = False
     return(
         {
             "problemReportId": problemReportId,
@@ -34,7 +45,8 @@ def create_pronto_object(file):
             "feature": feature,
             "gic": gic,
             "descriere": descriere,
-            "state": state
+            "state": state,
+            "saved": saved
         }
     )
 

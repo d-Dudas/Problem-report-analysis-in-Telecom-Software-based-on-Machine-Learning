@@ -10,15 +10,6 @@ import './variables.css';
 
 function App() {
 
-  const [formData, setFormData] = useState({
-    titlu: '',
-    descriere: '',
-    feature: '',
-    gic: '',
-    release: '',
-    state: ''
-  });
-
   const [prontoList, setProntoList] = useState([])
 
   const [pages, setPages] = useState([
@@ -42,11 +33,35 @@ function App() {
       <Router>
         <Dashboard pages={pages} pkey={pkey}/>
         <Routes>
-          <Route path="/" element={<NewPronto formData={formData} setFormData={setFormData} setKey={setKey} />} />
-          <Route path="/form-result" element={<Result formData={formData} setKey={setKey} pkey={"/"}/>} />
-          <Route path="/upload" element={<UploadPage setKey={setKey} dashboard_content={pages} setDash={setPages} setProntoList={setProntoList}/>} />
-          {prontoList.map(pronto => {
-            return(<Route path={"/" + pronto.problemReportId} element={<Result formData={pronto} setKey={setKey} pkey={"/" + pronto.problemReportId}/>} />);
+          <Route 
+            path="/"
+            element=
+              {
+                <NewPronto 
+                  prontoList={prontoList}
+                  setProntoList={setProntoList}
+                  setKey={setKey}
+                  dashboard_content={pages}
+                  setDash={setPages}
+                />
+              } 
+          />
+          <Route path="/upload" element={<UploadPage setKey={setKey} dashboard_content={pages} setDash={setPages} prontoList={prontoList} setProntoList={setProntoList}/>} />
+          {prontoList.map((pronto, index) => {
+            return(
+                <Route path={"/" + pronto.problemReportId}
+                  element={
+                    <Result 
+                      prontoList={prontoList}
+                      setProntoList={setProntoList}
+                      index={index}
+                      setKey={setKey}
+                      pkey={"/" + pronto.problemReportId}
+                    />
+                  }
+                />
+              );
+
           })}
         </Routes>
       </Router>

@@ -39,7 +39,7 @@
 .d-chart {
     position: absolute;
     width: 100%;
-    top: 15%;
+    top: 20%;
 }
 
 .accuracy-text1 {
@@ -53,3 +53,105 @@
     text-align: center;
     top: 2%;
 }
+
+.accuracy-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.save-pronto-question {
+    position: absolute;
+    width: 100%;
+    top: 55%;
+    height: 45%;
+}
+
+.accuracy-question {
+    position: absolute;
+    width: 90%;
+    height: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    z-index: 5;
+    text-align: center;
+    top: 10%;
+}
+
+.accuracy-button {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height:7vh;
+    border: none;
+    border-radius: 12px;
+    background-blend-mode: normal;
+    box-shadow: -5px 5px 5px rgba(0,0,0,0.5);
+    color: white;
+    font-size: 2rem;
+    font-weight: 600;
+    -webkit-transition: background-color 1000ms linear;
+    -ms-transition: background-color 1000ms linear;
+    transition: background-color 1000ms linear;
+    -moz-transition: background-color 1s;
+    z-index: 1;
+}
+
+.accuracy-yes-button::before, .accuracy-no-button::before {
+    border: none;
+    border-radius: 12px;
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    transition: opacity 0.5s linear;
+    opacity: 0;
+}
+
+.accuracy-yes-button {
+    top: 60%;
+    background: linear-gradient(90deg, rgba(5,255,138,0.86) 0%, #002fff 100%);
+}
+
+.accuracy-yes-button::before {
+    background: linear-gradient(90deg, rgba(5,255,138,0.86) 0%,  rgba(5,255,138,0.86) 40%, #002fff 100%);
+}
+
+.accuracy-yes-button:hover::before {
+    opacity: 1;
+}
+
+.thx-msg {
+    position: absolute;
+    width: 80%;
+    height: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.8rem;
+    z-index: 5;
+    text-align: center;
+    top: 70%;
+}
+
+
+/* .accuracy-no-button {
+    top: 85%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.69) 0%, #002fff 100%);
+}
+
+.accuracy-no-button::before {
+    background: linear-gradient(90deg, rgba(0,0,0,0.69) 0%, rgba(0,0,0,0.69) 40%, #002fff 100%);
+}
+
+.accuracy-no-button:hover::before {
+    opacity: 1;
+} */

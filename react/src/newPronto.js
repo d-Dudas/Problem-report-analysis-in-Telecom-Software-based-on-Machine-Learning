@@ -1,14 +1,34 @@
+// CSS files
 import "./newPronto.css";
 import 'react-quill/dist/quill.snow.css';
+
+// Components
 import MainDiv from './MainDiv';
 import ReactQuill from 'react-quill';
 import NextButton from './NextButton';
+
+// React related
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function NewPronto({formData, setFormData, setKey}) {
+function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoList}) {
+  
+    setKey('/');
 
-  setKey('/');
+    const [formData, setFormData] = useState({
+      problemReportId: '123',
+      title: '',
+      description: '',
+      feature: '',
+      groupInCharge: '',
+      release: '',
+      state: '',
+      saved: false
+    });
+
+    const auxProntoList = prontoList.slice();
+    const [descriere, setDescriere] = useState(formData.descriere);
+    const navigate = useNavigate();
 
     function sendDataToFlask() {
       fetch('/receive-data', {
@@ -20,7 +40,19 @@ function NewPronto({formData, setFormData, setKey}) {
       })
       .then(response => response.json())
       .then(data => {
-        setFormData({ ...formData, state: data.msg });
+        auxProntoList.push(data);
+        setProntoList(auxProntoList);
+        console.log(auxProntoList);
+
+        // Rebuild the subpages list
+        let key = "/" + data.problemReportId;
+        let name = data.problemReportId;
+        console.log(dashboard_content);
+        dashboard_content[0].subpages.push({key: key, name: name});
+
+        setProntoList(auxProntoList);
+        setDash(dashboard_content);
+        navigate('/' + auxProntoList[auxProntoList.length-1].problemReportId);
       })
       .catch(error => console.error(error));
     }
@@ -30,19 +62,13 @@ function NewPronto({formData, setFormData, setKey}) {
       setFormData({ ...formData, [name]: value });
     };
 
-    const [descriere, setDescriere] = useState(formData.descriere);
-
-    const navigate = useNavigate();
-
     function submitForm() {
-      formData.descriere = descriere;
-      formData.state = "abc";
-      if(Object.keys(formData).filter(key => key !== "state").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
+      formData.description = descriere;
+      if(Object.keys(formData).filter(key => key !== "state" && key !== "saved").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
         console.log("Nem jo.");
       } else {
         formData.state = '';
         sendDataToFlask();
-        navigate('/form-result');
       }
     }
 
@@ -61,7 +87,7 @@ function NewPronto({formData, setFormData, setKey}) {
             <form className='newPronto-form'>
                 <label className='newPronto-text-label'>
                     <p>Titlu</p>
-                    <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "titlu" value={formData.titlu} onChange={handleChange} ></input>
+                    <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "title" value={formData.titlu} onChange={handleChange} ></input>
                 </label>
                 <label className='newPronto-text-label'>
                     <p>Feature</p>
@@ -69,7 +95,7 @@ function NewPronto({formData, setFormData, setKey}) {
                 </label>
                 <label className='newPronto-text-label'>
                     <p>Group in charge</p>
-                    <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "gic" value={formData.gic} onChange={handleChange}></input>
+                    <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "groupInCharge" value={formData.gic} onChange={handleChange}></input>
                 </label>
                 <label className='newPronto-text-label'>
                     <p>Release</p>

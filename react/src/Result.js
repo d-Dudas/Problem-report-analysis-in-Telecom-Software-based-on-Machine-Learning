@@ -1,34 +1,24 @@
-import './newPronto.css';
-import "./Result.css";
+// CSS files
+import './Result.css';
+
+// Components
 import MainDiv from './MainDiv';
 import parse from 'html-react-parser'
-import NextButton from './NextButton';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect} from 'react';
 import LoadingDots from './LoadingDots';
+
+// React related
 import { Chart } from "react-google-charts";
 
-function Result({formData, setKey, pkey}){
+function Result({prontoList, setProntoList, index, setKey, pkey}){
 
-  setKey(pkey);
+    setKey(pkey);
 
-    const navigate = useNavigate();
-
-    function switchPage () 
-    {  
-      navigate('/');
-    }
-
-    const [left, setLeft] = useState("120vw");
-
-    useEffect(() => {
-      setLeft("70vw");
-    }, []);
+    const accuracy = 71.9;
 
     const data = [
       ["Task", "Hours per Day"],
-      ["", 73.6],
-      ["", (100 - 73.6)]
+      ["", accuracy],
+      ["", (100 - accuracy)]
     ];
     
     const options = {
@@ -43,17 +33,32 @@ function Result({formData, setKey, pkey}){
       },
     };
 
+    function savePronto() {
+      fetch('/save-pronto', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(prontoList[index])
+      })
+      .catch(error => console.error(error));
+
+      const auxList = prontoList.slice();
+      auxList[index] = {...auxList[index], saved: true};
+      setProntoList(auxList);
+    }
+
     return(
       <div className='result-content'>
         <div className='main-div-result'>
           <MainDiv headerText={"Prediction"}>
               <div className='result-div'>
-                  <p><strong>Titlu:</strong> {formData.title}</p>
-                  <p><strong>Feature:</strong> {formData.feature}</p>
-                  <p><strong>Release:</strong> {formData.release}</p>
-                  <p><strong>Gic:</strong> {formData.gic}</p>
-                  <p><strong>Descriere:</strong></p>{parse(formData.descriere)}
-                  <div className='result'><p><strong>Predicted state:</strong></p> {formData.state === '' ? <LoadingDots /> : <p>{formData.state}</p>}</div>
+                  <p><strong>Titlu:</strong> {prontoList[index].title}</p>
+                  <p><strong>Feature:</strong> {prontoList[index].feature}</p>
+                  <p><strong>Release:</strong> {prontoList[index].release}</p>
+                  <p><strong>Gic:</strong> {prontoList[index].gic}</p>
+                  <p><strong>Descriere:</strong></p>{parse(prontoList[index].descriere)}
+                  <div className='result'><p><strong>Predicted state:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>
               </div>
           </MainDiv>
         </div>
@@ -61,14 +66,22 @@ function Result({formData, setKey, pkey}){
           <MainDiv headerText={"Accuracy"}>
             <p className='accuracy-text1'>Our machine learnig model currently has a prediction accuracy of:</p>
             <div className='d-chart'>
-            <Chart
-              chartType="PieChart"
-              data={data}
-              options={options}
-              width={"100%"}
-              height={"30vh"}
-            />
+              <p className='accuracy-value'>{accuracy + "%"}</p>
+              <Chart
+                chartType="PieChart"
+                data={data}
+                options={options}
+                width={"100%"}
+                height={"30vh"}
+              />
             </div>
+            {
+              prontoList[index].saved ? <div className='thx-msg'>Thanks for helping us improve our algorithm!</div> :
+                            <div className='save-pronto-question'>
+                              <p className='accuracy-question'>Is this state prediction correct?</p>
+                              <button className='accuracy-yes-button accuracy-button' onClick={savePronto}>Yes</button>
+                            </div>
+            }
           </MainDiv>
         </div>
       </div>
