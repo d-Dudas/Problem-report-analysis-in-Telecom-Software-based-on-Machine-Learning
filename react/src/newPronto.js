@@ -16,7 +16,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     setKey('/');
 
     const [formData, setFormData] = useState({
-      problemReportId: '123',
+      problemReportId: '',
       title: '',
       description: '',
       feature: '',
@@ -43,12 +43,10 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       .then(data => {
         auxProntoList.push(data);
         setProntoList(auxProntoList);
-        console.log(auxProntoList);
 
         // Rebuild the subpages list
         let key = "/" + data.problemReportId;
         let name = data.problemReportId;
-        console.log(dashboard_content);
         dashboard_content[0].subpages.push({key: key, name: name});
 
         setProntoList(auxProntoList);
@@ -95,8 +93,12 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
           <MainDiv headerText="Upload new pronto">
             <form className='newPronto-form'>
                 <label className='newPronto-text-label'>
-                    <p>Titlu</p>
-                    <input className='newPronto-text-label-input' placeholder='Titlu' type = "text" name = "title" value={formData.titlu} onChange={handleChange} ></input>
+                    <p>Title</p>
+                    <input className='newPronto-text-label-input' placeholder='Title' type = "text" name = "title" value={formData.title} onChange={handleChange} ></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Problem report ID</p>
+                    <input className='newPronto-text-label-input' placeholder='Problem report ID' type = "text" name = "problemReportId" value={formData.problemReportId} onChange={handleChange} ></input>
                 </label>
                 <label className='newPronto-text-label'>
                     <p>Feature</p>
@@ -111,8 +113,8 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
                     <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Descriere</p>
-                    <ReactQuill placeholder='Descriere' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
+                    <p>Description</p>
+                    <ReactQuill placeholder='Description' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
                 </label>
             </form>
           </MainDiv>
