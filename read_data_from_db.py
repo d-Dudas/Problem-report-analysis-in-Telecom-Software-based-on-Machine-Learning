@@ -22,9 +22,9 @@ def get_useful_features_list(prontos_collection = MongoClient().prontosdb.pronto
     data_list = []
     for pronto in prontos_collection.find({}):
         useful_data = {}
-        useful_data["feature"] = pronto["feature"]
-        useful_data["groupInCharge"] = pronto["groupInCharge"]
-        useful_data["release"] = pronto["release"][0]
+        useful_data["feature"] = "" if pronto["feature"] == None else pronto["feature"]
+        useful_data["groupInCharge"] = "" if pronto["groupInCharge"] == None else pronto["groupInCharge"]
+        useful_data["release"] = "" if pronto["release"][0] == None else pronto["release"][0]
         data_list.append(useful_data)
 
     return data_list

@@ -1,5 +1,9 @@
 from flask import Flask, jsonify, request
 import json
+# import sys
+# sys.path.append('../../Problem-report-analysis-in-Telecom-Software-based-on-Machine-Learning')
+# sys.path.append('../../Problem-report-analysis-in-Telecom-Software-based-on-Machine-Learning/data/')
+import process_data as pd
 
 app = Flask(__name__)
 
@@ -35,20 +39,23 @@ def create_pronto_object(file):
     feature = file['feature']
     gic = file['groupInCharge']
     descriere = file['description']
-    state = 'Ana are mere'
     saved = False
-    return(
-        {
+
+    pronto = {
             "problemReportId": problemReportId,
             "title": title,
             "release": release,
             "feature": feature,
-            "gic": gic,
-            "descriere": descriere,
-            "state": state,
+            "groupInCharge": gic,
+            "description": descriere,
+            "state": "Ana are mere",
             "saved": saved
         }
-    )
+
+    state, accuracy = pd.get_prediction(pronto)
+    pronto["state"] = state
+    pronto["accuracy"] = accuracy
+    return pronto
 
 @app.route('/receive-files', methods=['POST'])
 def receive_file():

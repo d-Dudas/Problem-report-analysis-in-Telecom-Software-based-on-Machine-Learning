@@ -7,7 +7,8 @@ function MainDiv(props) {
 
     useEffect(() => {
         // Keep the scroll at the bottom of the div
-        divRef.current.scrollTop = divRef.current.scrollHeight;
+        if(props.result)
+            divRef.current.scrollTop = divRef.current.scrollHeight;
     }, [divRef.current?.scrollHeight]);
 
     return(

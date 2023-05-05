@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import MainDiv from './MainDiv';
 import ReactQuill from 'react-quill';
 import NextButton from './NextButton';
+import LoadingScreen from "./LoadingScreen";
 
 // React related
 import { useEffect, useState } from 'react';
@@ -30,8 +31,10 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     const [descriere, setDescriere] = useState(formData.descriere);
     const navigate = useNavigate();
     const [error, setError] = useState(false);
+    const [loading, setloading] = useState(false)
 
     function sendDataToFlask() {
+      setloading(true);
       fetch('/receive-data', {
         method: 'POST',
         headers: {
@@ -81,6 +84,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
 
     return (
       <div>
+        {loading ? <LoadingScreen /> : <></>}
         {error ?
           <div className="empty-fields-error-screen">
             <div className="empty-fields-error-div">
@@ -90,7 +94,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
           </div> : <></>
         }
         <div class='newPronto-div'>
-          <MainDiv headerText="Upload new pronto">
+          <MainDiv headerText="Upload new pronto" result={false}>
             <form className='newPronto-form'>
                 <label className='newPronto-text-label'>
                     <p>Title</p>

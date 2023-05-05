@@ -7,14 +7,14 @@
   }
   
 .dot {
-    height: 0.5rem;
-    width: 0.5rem;
+    height: 1rem;
+    width: 1rem;
     border-radius: 50%;
     background: linear-gradient(360deg,
                 rgba(var(--left-blue), 0.5) 0%,
                 rgba(var(--right-blue)) 100%);
     animation: jump 1.2s ease-in-out infinite;
-    margin: 0 2px;
+    margin: 0 5px;
 }
 
 .dot-container p {
@@ -23,6 +23,7 @@
                 rgba(var(--right-blue)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-size: 3rem;
 }
   
 .dot:nth-child(2) {
@@ -35,7 +36,7 @@
 
 @keyframes jump {
     0%, 80%, 100% {
-        transform: translateY(0);
+        transform: translateY(10px);
     }
     40% {
         transform: translateY(-10px);

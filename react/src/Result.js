@@ -13,12 +13,12 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
 
     setKey(pkey);
 
-    const accuracy = 71.9;
+    const accuracy = Number((prontoList[index].accuracy * 100).toFixed(2));
 
     const data = [
       ["Task", "Hours per Day"],
       ["", accuracy],
-      ["", (100 - accuracy)]
+      ["", (100.0 - accuracy)]
     ];
     
     const options = {
@@ -51,19 +51,19 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
     return(
       <div className='result-content'>
         <div className='main-div-result'>
-          <MainDiv headerText={"Prediction"}>
+          <MainDiv headerText={"Prediction"} result={true}>
               <div className='result-div'>
                   <p><strong>Titlu:</strong> {prontoList[index].title}</p>
                   <p><strong>Feature:</strong> {prontoList[index].feature}</p>
                   <p><strong>Release:</strong> {prontoList[index].release}</p>
-                  <p><strong>Gic:</strong> {prontoList[index].gic}</p>
-                  <p><strong>Descriere:</strong></p>{parse(prontoList[index].descriere)}
+                  <p><strong>Gic:</strong> {prontoList[index].groupInCharge}</p>
+                  <p><strong>Descriere:</strong></p>{parse(prontoList[index].description)}
                   <div className='result'><p><strong>Predicted state:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>
               </div>
           </MainDiv>
         </div>
         <div className='save-pronto-div'>
-          <MainDiv headerText={"Accuracy"}>
+          <MainDiv headerText={"Accuracy"} result={false}>
             <p className='accuracy-text1'>Our machine learnig model currently has a prediction accuracy of:</p>
             <div className='d-chart'>
               <p className='accuracy-value'>{accuracy + "%"}</p>

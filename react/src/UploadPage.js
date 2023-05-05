@@ -9,6 +9,7 @@ import close from './images/Close.png';
 // Components
 import MainDiv from './MainDiv';
 import NextButton from './NextButton';
+import LoadingScreen from './LoadingScreen';
 
 // React related
 import { useRef, useState } from 'react';
@@ -22,6 +23,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
     const navigate = useNavigate();
     const [uploadedFiles, uploadFile] = useState([]);
     const auxProntoList = prontoList.slice();
+    const [loading, setloading] = useState(false)
 
     function handleDragOver(event) {
         event.preventDefault();
@@ -99,6 +101,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
     }
 
     async function uploadFiles() {
+        setloading(true);
         const formData = new FormData();
         for(let i = 0; i < uploadedFiles.length; i++){
             formData.append('files[]', uploadedFiles[i]);
@@ -118,8 +121,9 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
 
     return(
         <div className='upload-page-content'>
+            {loading ? <LoadingScreen /> : <></>}
             <div className={uploadedFiles.length > 0 ? 'dropzone-div' : 'dropzone-div-alone'}>
-                <MainDiv headerText="Upload new pronto">
+                <MainDiv headerText="Upload new pronto" result={false}>
                     <div 
                         className='dropzone'
                         onDragOver={handleDragOver}
@@ -141,7 +145,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
             {
                 uploadedFiles.length > 0 && (
                     <div className='files'>
-                        <MainDiv headerText='Prontos'>
+                        <MainDiv headerText='Prontos' result={false}>
                             <div className='files-list'>
                                 {uploadedFiles.map(file => {
                                         return(
