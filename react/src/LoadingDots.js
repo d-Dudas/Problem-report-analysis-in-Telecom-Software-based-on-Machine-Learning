@@ -1,3 +1,4 @@
+// CSS files
 import './LoadingDots.css';
 
 function LoadingDots() {

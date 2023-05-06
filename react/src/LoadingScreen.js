@@ -1,5 +1,7 @@
+// CSS files
 import './LoadingScreen.css'
 
+// Components
 import LoadingDots from './LoadingDots';
 
 function LoadingScreen() {

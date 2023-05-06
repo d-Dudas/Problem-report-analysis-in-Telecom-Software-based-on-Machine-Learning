@@ -5,6 +5,12 @@ import read_data_from_db as rdb
 import save_and_load_data as sld
 from sklearn import preprocessing
 from sklearn.naive_bayes import MultinomialNB
+from sklearn import svm
+from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import CategoricalNB
+from scipy import sparse
+from nltk.stem.snowball import SnowballStemmer
+from sklearn.naive_bayes import ComplementNB
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -31,6 +37,7 @@ def filter_tokens(tokenized_descriptions):
 def stemm_tokens(tokenized_descriptions, stemmer = nltk.PorterStemmer()):
     # The stemmed tokens will be stored in the following array
     stemmed_descriptions = []
+    stemmer = SnowballStemmer("english")
     for iter in tokenized_descriptions:
         stemmed_descriptions.append([stemmer.stem(t) for t in iter])
 
@@ -122,28 +129,6 @@ def encode_data(data):
     label_encoder = preprocessing.LabelEncoder()
     return label_encoder.fit_transform(data), label_encoder
 
-def get_multinomialMB(pronto):
-    enc_states = sld.deserialize_object("encoded_states.pickle")
-    y = sld.load_sparse_matrix("title_desc_vec.npz")
-    v, title_desc_vec = fget_title_desc_vector()
-    d, usf2 = fget_dict_vector(rdb.get_useful_features_list())
-    x_train, x_test, y_train, y_test = train_test_split(y.toarray(), enc_states, test_size = 0.5)
-    uf = d.transform([{"feature": pronto["feature"], "groupInCharge": pronto["groupInCharge"], "release": pronto["release"]}])
-    tdv = v.transform(prepare_tdv(pronto["title"] + " " + pronto["description"]))
-
-    # x = sp.hstack([tdv, uf])
-    # x = sp.hstack([tdv, uf])
-    # tdva = title_desc_vec.transform(tdv)
-    # MultinomialNB for accuracy
-    mnb = MultinomialNB()
-    mnb.fit(x_train, y_train)
-
-    pr = mnb.predict(tdv)
-    le, aux = encode_data(rdb.get_encoded_state())
-    print(le.inverse_transform(pr))
-    
-    return mnb
-
 pronto = {
   "_id": {
     "$oid": "64175dbaffad73407afc6b3b"
@@ -211,12 +196,12 @@ def get_prediction(pronto):
     print("Useful feature list vector loaded...")
 
     # get encoded states
-    # encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
-    # sld.serialize_object("encoded_states.pickle", encoded_states)
-    # sld.serialize_object("label_encoder.pickle", label_encoder)
+    encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
+    sld.serialize_object("encoded_states.pickle", encoded_states)
+    sld.serialize_object("label_encoder.pickle", label_encoder)
 
-    encoded_states = sld.deserialize_object("encoded_states.pickle")
-    label_encoder = sld.deserialize_object("label_encoder.pickle")
+    # encoded_states = sld.deserialize_object("encoded_states.pickle")
+    # label_encoder = sld.deserialize_object("label_encoder.pickle")
 
     print("Ecoded states loaded...")
 
@@ -231,7 +216,8 @@ def get_prediction(pronto):
     print("Split done...")
 
     # train the model
-    mnb = MultinomialNB()
+    mnb = GaussianNB()
+    # mnb = ComplementNB()
     mnb.fit(x_train, y_train)
     accuracy = mnb.score(x_test, y_test)
 
@@ -250,9 +236,9 @@ def get_prediction(pronto):
     print("Pronto input prepared...")
 
     # get prediction
-    prediction = mnb.predict(pronto_input)
+    prediction = mnb.predict(pronto_input.toarray())
 
-    print("Prediction1:")
+    print("Prediction:")
 
     # "translate" prediction
     prediction = label_encoder.inverse_transform(prediction)
@@ -263,4 +249,4 @@ def get_prediction(pronto):
     # print(r)
     return prediction[0], accuracy
 
-# get_prediction(pronto)
+get_prediction(pronto)

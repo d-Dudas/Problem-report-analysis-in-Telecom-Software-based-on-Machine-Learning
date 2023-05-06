@@ -1,4 +1,7 @@
+// CSS files
 import "./Background.css";
+
+// Images, icons
 import logo from "./images/Nokia.png";
 
 function Background()

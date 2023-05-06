@@ -66,3 +66,20 @@
     width: auto;
     height: calc(var(--header-height) - 2vh);
 }
+
+/* Set the scrollbar width and color */
+::-webkit-scrollbar {
+    width: 3px;
+    /* height: 10px; */
+    background-color: #f5f5f500;
+}
+
+/* Set the thumb color */
+::-webkit-scrollbar-thumb {
+    background-color: #999;
+}
+
+/* Set the thumb on hover color */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
+}

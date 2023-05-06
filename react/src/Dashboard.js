@@ -1,4 +1,7 @@
+// CSS files
 import './Dashboard.css';
+
+// React related
 import { useNavigate } from 'react-router-dom';
 
 function Dashboard({pages, pkey}) {

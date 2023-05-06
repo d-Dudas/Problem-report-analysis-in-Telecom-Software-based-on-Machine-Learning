@@ -1,5 +1,8 @@
+// CSS files
 import "./MainDiv.css";
-import React, { useState, useRef, useEffect } from "react";
+
+// React related
+import React, { useRef, useEffect } from "react";
 
 function MainDiv(props) {
 
@@ -9,7 +12,7 @@ function MainDiv(props) {
         // Keep the scroll at the bottom of the div
         if(props.result)
             divRef.current.scrollTop = divRef.current.scrollHeight;
-    }, [divRef.current?.scrollHeight]);
+    }, [divRef.current?.scrollHeight, props.result]);
 
     return(
         <div className='main-div'>
