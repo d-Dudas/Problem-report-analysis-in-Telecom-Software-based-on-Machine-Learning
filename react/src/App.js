@@ -63,6 +63,18 @@ function App() {
               );
 
           })}
+          <Route 
+            path="*"
+            element=
+              {
+                <NewPronto 
+                  prontoList={prontoList}
+                  setProntoList={setProntoList}
+                  setKey={setKey}
+                  dashboard_content={pages}
+                  setDash={setPages}
+                />
+              }/>
         </Routes>
       </Router>
     </>

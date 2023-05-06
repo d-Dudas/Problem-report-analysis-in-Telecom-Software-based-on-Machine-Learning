@@ -1,36 +1,49 @@
-from flask import Flask, jsonify, request
 import json
-# import sys
-# sys.path.append('../../Problem-report-analysis-in-Telecom-Software-based-on-Machine-Learning')
-# sys.path.append('../../Problem-report-analysis-in-Telecom-Software-based-on-Machine-Learning/data/')
 import process_data as pd
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-@app.route('/api/data')
-def get_data():
-    data = {'message': 'Hello from the Flask API!', 'msg': 'Ana are mere!'}
-    return jsonify(data)
+def is_valid_for_prediction(pronto):
+    necessary_keys = [
+                  "description",
+                  "feature",
+                  "groupInCharge",
+                  "title",
+                  "release"
+                  ]
 
-@app.route('/receive-data', methods=['POST'])
-def receive_data():
-    data = request.json
-    print(data)
-    data = create_pronto_object(data)
-    import time
-    time.sleep(3)
-    # Do something with the data
-    return jsonify(data)
+    is_valid = True
+    for key in necessary_keys:
+        if key not in list(pronto.keys()):
+            is_valid = False
+    
+    return is_valid
 
-@app.route('/save-pronto', methods=['POST'])
-def save_pronto():
-    data = request.json
-    print(data)
-    data = {'msg': 'Ana are mere'}
-    import time
-    time.sleep(3)
-    # Do something with the data
-    return jsonify(data)
+def is_valid_pronto(pronto):
+    valid_keys = ["problemReportId",
+                  "faultAnalysisId",
+                  "attachedPRs",
+                  "author",
+                  "build",
+                  "description",
+                  "feature",
+                  "groupInCharge",
+                  "state",
+                  "title",
+                  "authorGroup",
+                  "informationrequestID",
+                  "statusLog",
+                  "release",
+                  "explanationforCorrectionNotNeeded",
+                  "reasonWhyCorrectionisNotNeeded",
+                  "faultAnalysisFeature",
+                  "faultAnalysisGroupInCharge",
+                  "stateChangedtoClosed",
+                  "faultAnalysisTitle"
+                  ]
+    
+    return list(pronto.keys()) == valid_keys
 
 def create_pronto_object(file):
     problemReportId = file['problemReportId']
@@ -52,10 +65,27 @@ def create_pronto_object(file):
             "saved": saved
         }
 
-    state, accuracy = pd.get_prediction(pronto)
+    state, accuracy = pd.get_fast_prediction(pronto)
     pronto["state"] = state
     pronto["accuracy"] = accuracy
+
     return pronto
+
+@app.route('/receive-data', methods=['POST'])
+def receive_data():
+    data = request.json
+    print(data)
+    data = create_pronto_object(data)
+
+    return jsonify(data)
+
+@app.route('/save-pronto', methods=['POST'])
+def save_pronto():
+    data = request.json
+    print(data)
+    data = {'msg': 'Ana are mere'}
+
+    return jsonify(data)
 
 @app.route('/receive-files', methods=['POST'])
 def receive_file():
@@ -65,9 +95,11 @@ def receive_file():
         file_contents = json.loads(file.read().decode('utf8').replace("'", '"'))
         if(isinstance(file_contents, list)):
             for f in file_contents:
-                response.append(create_pronto_object(f))
+                if is_valid_for_prediction(f):
+                    response.append(create_pronto_object(f))
         else:
-            response.append(create_pronto_object(file_contents))
+            if is_valid_for_prediction(file_contents):
+                response.append(create_pronto_object(file_contents))
     return(response)
 
 if __name__ == '__main__':

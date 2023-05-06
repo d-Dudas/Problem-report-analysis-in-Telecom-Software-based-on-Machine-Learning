@@ -10,6 +10,7 @@ import close from './images/Close.png';
 import MainDiv from './MainDiv';
 import NextButton from './NextButton';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 // React related
 import { useRef, useState } from 'react';
@@ -23,7 +24,8 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
     const navigate = useNavigate();
     const [uploadedFiles, uploadFile] = useState([]);
     const auxProntoList = prontoList.slice();
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const [invalidProntoError, setInvalidProntoError] = useState(false);
 
     function handleDragOver(event) {
         event.preventDefault();
@@ -113,13 +115,23 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
               body: formData,
             });
             const data = await response.json();
-            setSubpages(data);
+            if(data.length == 0) {
+                setloading(false);
+                setInvalidProntoError(true);
+            } else {
+                setSubpages(data);
+            }
           } catch (error) {
             console.error(error);
           }
     }
 
     return(
+        <>
+        {invalidProntoError ?
+            <ErrorScreen errorMessage={'No valid pronto found'} setError={setInvalidProntoError} setTo={false} />
+            : <></>
+        }
         <div className='upload-page-content'>
             {loading ? <LoadingScreen /> : <></>}
             <div className={uploadedFiles.length > 0 ? 'dropzone-div' : 'dropzone-div-alone'}>
@@ -165,6 +177,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
                 )
             }
         </div>
+        </>
     )
 }
 

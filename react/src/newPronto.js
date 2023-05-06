@@ -7,6 +7,7 @@ import MainDiv from './MainDiv';
 import ReactQuill from 'react-quill';
 import NextButton from './NextButton';
 import LoadingScreen from "./LoadingScreen";
+import ErrorScreen from "./ErrorScreen";
 
 // React related
 import { useEffect, useState } from 'react';
@@ -86,12 +87,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       <div>
         {loading ? <LoadingScreen /> : <></>}
         {error ?
-          <div className="empty-fields-error-screen">
-            <div className="empty-fields-error-div">
-              <h1 className="empty-fields-error-text">You should complete every field</h1>
-              <button className="empty-fields-error-button" onClick={() => setError(false)}>Got it!</button>
-            </div>
-          </div> : <></>
+          <ErrorScreen errorMessage={"You should complete every field"} setError={setError} setTo={false} /> : <></>
         }
         <div class='newPronto-div'>
           <MainDiv headerText="Upload new pronto" result={false}>

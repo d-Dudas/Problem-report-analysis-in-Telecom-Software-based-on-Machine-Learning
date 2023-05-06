@@ -1,0 +1,99 @@
+.error-screen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    animation: error-screen-animation alternate 0.5s;
+}
+
+@keyframes error-screen-animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.error-div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15%;
+    height: 35%;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.568);
+    border-radius: 30px;
+    box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.3),
+                5px 5px 5px rgba(0, 0, 0, 0.3);
+    animation: error-div-animation 0.5s;
+}
+
+@keyframes error-div-animation {
+    from {
+        top: -100vw;
+    }
+    75% {
+        top: 70%;
+    }
+    to {
+        top: 50%;
+    }
+}
+
+.error-text {
+    position: absolute;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color:rgb(71, 71, 71);
+    text-align: center;
+    width: 80%;
+    left: 10%;
+    top: 10%;
+}
+
+.error-button {
+    position: absolute;
+    width: 50%;
+    height: 15%;
+    left: 25%;
+    top: 70%;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(var(--left-blue), 0.6) 0%,
+                                    rgba(var(--right-blue), 0.8) 100%);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3),
+                -2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.error-button::before {
+    border: none;
+    border-radius: 10px;
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    transition: opacity 0.5s linear;
+    opacity: 0;
+}
+
+.error-button::before {
+    background: linear-gradient(90deg, rgb(var(--left-blue)) 0%,
+    rgb(var(--right-blue)) 100%);
+}
+
+.error-button:hover::before {
+    opacity: 1;
+}
+
+.error-button:hover {
+    background-color: rgba(255, 255, 255, 0);
+}
