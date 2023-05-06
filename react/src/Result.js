@@ -76,6 +76,7 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
               />
             </div>
             {
+              !prontoList[index].isValid ? <div className='thx-msg'>This pronto has empty fields, so it can't be saved</div> :
               prontoList[index].saved ? <div className='thx-msg'>Thanks for helping us improve our algorithm!</div> :
                             <div className='save-pronto-question'>
                               <p className='accuracy-question'>Is this state prediction correct?</p>

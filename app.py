@@ -68,6 +68,7 @@ def create_pronto_object(file):
     state, accuracy = pd.get_fast_prediction(pronto)
     pronto["state"] = state
     pronto["accuracy"] = accuracy
+    pronto["isValid"] = is_valid_pronto(file)
 
     return pronto
 
