@@ -1,19 +1,18 @@
 import nltk
-import numpy as np
 import scipy.sparse as sp
 import read_data_from_db as rdb
 import save_and_load_data as sld
 from sklearn import preprocessing
-from sklearn.naive_bayes import MultinomialNB
-from sklearn import svm
 from sklearn.naive_bayes import GaussianNB
-from sklearn.naive_bayes import CategoricalNB
-from scipy import sparse
 from nltk.stem.snowball import SnowballStemmer
-from sklearn.naive_bayes import ComplementNB
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+import time
+from threading import Thread
+
+last_ml_model_update = time.time()
+re_train_ml_model_thread = None
 
 #Filter and keep only the words that are in the english dictionary
 def filter_tokens(tokenized_descriptions):
@@ -173,57 +172,91 @@ pronto = {
 
 # 
 
-def get_prediction(pronto):
-    # first, get the title and description
-    # vector, from db or ./data/
-    # title_and_desc_vec, vectorizer = get_title_desc_vector()
-    # sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)
-    # sld.serialize_object("vectorizer.pickle", vectorizer)
-    title_and_desc_vec = sld.load_sparse_matrix("title_and_desc_vec.npz")
+# def get_prediction(pronto):
+#     # first, get the title and description
+#     # vector, from db or ./data/
+#     title_and_desc_vec, vectorizer = get_title_desc_vector()
+#     sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)
+#     sld.serialize_object("vectorizer.pickle", vectorizer)
+#     # title_and_desc_vec = sld.load_sparse_matrix("title_and_desc_vec.npz")
+#     # vectorizer = sld.deserialize_object("vectorizer.pickle")
+
+#     print("Title and desc vector loaded...")
+
+#     # get the useful feature list dict vector
+#     # from db or ./data/
+#     # useful_feature_list, dict_vectorizer = get_dict_vector(rdb.get_useful_features_list())
+#     # sld.save_sparse_matrix("useful_feature_list.npz", useful_feature_list)
+#     # sld.serialize_object("dict_vectorizer.pickle", dict_vectorizer)
+
+#     useful_feature_list = sld.load_sparse_matrix("useful_feature_list.npz")
+#     dict_vectorizer = sld.deserialize_object("dict_vectorizer.pickle")
+
+#     print("Useful feature list vector loaded...")
+
+#     # get encoded states
+#     encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
+#     sld.serialize_object("encoded_states.pickle", encoded_states)
+#     sld.serialize_object("label_encoder.pickle", label_encoder)
+
+#     # encoded_states = sld.deserialize_object("encoded_states.pickle")
+#     # label_encoder = sld.deserialize_object("label_encoder.pickle")
+
+#     print("Ecoded states loaded...")
+
+#     # concatenate title and desc vector with useful feature list
+#     model_input = sp.hstack([title_and_desc_vec, useful_feature_list])
+
+#     print("Vectors concatenated...")
+
+#     # split the data into training and test parts
+#     x_train, x_test, y_train, y_test = train_test_split(model_input.toarray(), encoded_states, test_size = 0.7, random_state=42)
+
+#     print("Split done...")
+
+#     # train the model
+#     ml_model = GaussianNB()
+#     # ml_model = ComplementNB()
+#     ml_model.fit(x_train, y_train)
+#     sld.serialize_object("MLmodel.pickle", ml_model)
+#     accuracy = ml_model.score(x_test, y_test)
+#     sld.serialize_object("accuracy.pickle", accuracy)
+
+#     print("Model trained...")
+#     print("Score: " + str(accuracy))
+
+#     # get the necesarry data from ponto
+#     pronto_title_and_desc_vec = vectorizer.transform(prepare_tdv(pronto["title"] + " " + pronto["description"]))
+#     pronto_useful_feature_list = dict_vectorizer.transform([{"feature": pronto["feature"], "groupInCharge": pronto["groupInCharge"], "release": pronto["release"]}])
+
+#     print("Data extracted from pronto")
+
+#     # concatenate the vectors
+#     pronto_input = sp.hstack([pronto_title_and_desc_vec, pronto_useful_feature_list])
+
+#     print("Pronto input prepared...")
+
+#     # get prediction
+#     prediction = ml_model.predict(pronto_input.toarray())
+
+#     print("Prediction:")
+
+#     # "translate" prediction
+#     prediction = label_encoder.inverse_transform(prediction)
+
+#     print(prediction)
+
+#     # r = {"prediction": prediction[0], "accuracy": accuracy}
+#     # print(r)
+#     return prediction[0], accuracy
+
+def get_fast_prediction(pronto):
+
     vectorizer = sld.deserialize_object("vectorizer.pickle")
-
-    print("Title and desc vector loaded...")
-
-    # get the useful feature list dict vector
-    # from db or ./data/
-    # useful_feature_list, dict_vectorizer = get_dict_vector(rdb.get_useful_features_list())
-    # sld.save_sparse_matrix("useful_feature_list.npz", useful_feature_list)
-    # sld.serialize_object("dict_vectorizer.pickle", dict_vectorizer)
-
-    useful_feature_list = sld.load_sparse_matrix("useful_feature_list.npz")
     dict_vectorizer = sld.deserialize_object("dict_vectorizer.pickle")
-
-    print("Useful feature list vector loaded...")
-
-    # get encoded states
-    encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
-    sld.serialize_object("encoded_states.pickle", encoded_states)
-    sld.serialize_object("label_encoder.pickle", label_encoder)
-
-    # encoded_states = sld.deserialize_object("encoded_states.pickle")
-    # label_encoder = sld.deserialize_object("label_encoder.pickle")
-
-    print("Ecoded states loaded...")
-
-    # concatenate title and desc vector with useful feature list
-    model_input = sp.hstack([title_and_desc_vec, useful_feature_list])
-
-    print("Vectors concatenated...")
-
-    # split the data into training and test parts
-    x_train, x_test, y_train, y_test = train_test_split(model_input.toarray(), encoded_states, test_size = 0.7, random_state=42)
-
-    print("Split done...")
-
-    # train the model
-    mnb = GaussianNB()
-    # mnb = ComplementNB()
-    mnb.fit(x_train, y_train)
-    accuracy = mnb.score(x_test, y_test)
-
-    print("Model trained...")
-    print("Score: " + str(accuracy))
-
+    label_encoder = sld.deserialize_object("label_encoder.pickle")
+    ml_model = sld.deserialize_object("MLmodel.pickle")
+    accuracy = sld.deserialize_object("accuracy.pickle")
     # get the necesarry data from ponto
     pronto_title_and_desc_vec = vectorizer.transform(prepare_tdv(pronto["title"] + " " + pronto["description"]))
     pronto_useful_feature_list = dict_vectorizer.transform([{"feature": pronto["feature"], "groupInCharge": pronto["groupInCharge"], "release": pronto["release"]}])
@@ -236,7 +269,7 @@ def get_prediction(pronto):
     print("Pronto input prepared...")
 
     # get prediction
-    prediction = mnb.predict(pronto_input.toarray())
+    prediction = ml_model.predict(pronto_input.toarray())
 
     print("Prediction:")
 
@@ -245,8 +278,57 @@ def get_prediction(pronto):
 
     print(prediction)
 
-    # r = {"prediction": prediction[0], "accuracy": accuracy}
-    # print(r)
+    try_retrain_ml_model()
+
     return prediction[0], accuracy
 
-get_prediction(pronto)
+def try_retrain_ml_model():
+    current_time = time.time()
+    global last_ml_model_update
+    global re_train_ml_model_thread
+    if((current_time - last_ml_model_update) / 3600 >= 72 and (re_train_ml_model_thread is None or not re_train_ml_model_thread.is_alive())):
+        last_ml_model_update = current_time
+        re_train_ml_model_thread = Thread(target=re_train_ml_model, args=())
+        re_train_ml_model_thread.start()
+    else:
+        print("The ML model was updated in the last 72 hours, or the update is still running")
+
+def try_retrain_ml_model_now():
+    global last_ml_model_update
+    global re_train_ml_model_thread
+    if re_train_ml_model_thread is None or not re_train_ml_model_thread.is_alive():
+        last_ml_model_update = time.time()
+        re_train_ml_model_thread = Thread(target=re_train_ml_model, args=())
+        re_train_ml_model_thread.start()
+    else:
+        print("The ML model is already updating...")
+
+def re_train_ml_model():
+    # Read the data from database and save the new processed data
+    print("Retraining ML model")
+    title_and_desc_vec, vectorizer = get_title_desc_vector()
+    sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)
+    sld.serialize_object("vectorizer.pickle", vectorizer)
+
+    useful_feature_list, dict_vectorizer = get_dict_vector(rdb.get_useful_features_list())
+    sld.save_sparse_matrix("useful_feature_list.npz", useful_feature_list)
+    sld.serialize_object("dict_vectorizer.pickle", dict_vectorizer)
+
+    encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
+    sld.serialize_object("encoded_states.pickle", encoded_states)
+    sld.serialize_object("label_encoder.pickle", label_encoder)
+
+    # Prepare the input for the ml model
+    model_input = sp.hstack([title_and_desc_vec, useful_feature_list])
+
+    # Split the data into test and train sets
+    x_train, x_test, y_train, y_test = train_test_split(model_input.toarray(), encoded_states, test_size = 0.7, random_state=50)
+
+    # Prepare the ml model and save the trained model and its accuracy
+    ml_model = GaussianNB()
+    ml_model.fit(x_train, y_train)
+    accuracy = ml_model.score(x_test, y_test)
+    sld.serialize_object("MLmodel.pickle", ml_model)
+    sld.serialize_object("accuracy.pickle", accuracy)
+
+    print("ML model retrained.")
