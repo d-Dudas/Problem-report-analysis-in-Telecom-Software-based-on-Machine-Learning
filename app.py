@@ -1,11 +1,10 @@
 import json
-import process_data as pd
 from flask import Flask, jsonify, request
+from process_data import get_fast_prediction, upload_pronto
 
 app = Flask(__name__)
 
-def is_valid_for_prediction(pronto):
-    necessary_keys = [
+necessary_keys = [
                   "description",
                   "feature",
                   "groupInCharge",
@@ -13,15 +12,7 @@ def is_valid_for_prediction(pronto):
                   "release"
                   ]
 
-    is_valid = True
-    for key in necessary_keys:
-        if key not in list(pronto.keys()):
-            is_valid = False
-    
-    return is_valid
-
-def is_valid_pronto(pronto):
-    valid_keys = ["problemReportId",
+valid_keys = ["problemReportId",
                   "faultAnalysisId",
                   "attachedPRs",
                   "author",
@@ -42,32 +33,27 @@ def is_valid_pronto(pronto):
                   "stateChangedtoClosed",
                   "faultAnalysisTitle"
                   ]
+
+def is_valid_for_prediction(pronto):
+    is_valid = True
+    for key in necessary_keys:
+        if key not in list(pronto.keys()):
+            is_valid = False
     
+    return is_valid
+
+def is_valid_pronto(pronto):
     return list(pronto.keys()) == valid_keys
 
-def create_pronto_object(file):
-    problemReportId = file['problemReportId']
-    title = file['title']
-    release = file['release']
-    feature = file['feature']
-    gic = file['groupInCharge']
-    descriere = file['description']
-    saved = False
+def create_pronto_object(file):  
+    pronto = {}
+    for key in file.keys():
+        pronto[key] = file[key]
 
-    pronto = {
-            "problemReportId": problemReportId,
-            "title": title,
-            "release": release,
-            "feature": feature,
-            "groupInCharge": gic,
-            "description": descriere,
-            "state": "Ana are mere",
-            "saved": saved
-        }
-
-    state, accuracy = pd.get_fast_prediction(pronto)
+    state, accuracy = get_fast_prediction(pronto)
     pronto["state"] = state
     pronto["accuracy"] = accuracy
+    pronto["saved"] = False
     pronto["isValid"] = is_valid_pronto(file)
 
     return pronto
@@ -83,8 +69,12 @@ def receive_data():
 @app.route('/save-pronto', methods=['POST'])
 def save_pronto():
     data = request.json
-    print(data)
-    data = {'msg': 'Ana are mere'}
+    aux = {}
+    for key in valid_keys:
+        aux[key] = data[key]
+    print(aux)
+    upload_pronto(aux)
+    data = {'msg': 'Pronto saved'}
 
     return jsonify(data)
 

@@ -332,3 +332,7 @@ def re_train_ml_model():
     sld.serialize_object("accuracy.pickle", accuracy)
 
     print("ML model retrained.")
+
+def upload_pronto(pronto):
+    if sld.upload_pronto(pronto):
+        try_retrain_ml_model_now()

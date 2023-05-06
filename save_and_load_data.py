@@ -2,10 +2,7 @@ import pickle
 from scipy.sparse import save_npz, load_npz
 from pymongo import MongoClient
 import pymongo
-try:
-    from process_data import try_retrain_ml_model_now
-except ImportError:
-    pass
+
 
 
 def save_sparse_matrix(filename, matrix):
@@ -29,9 +26,13 @@ def deserialize_object(filename):
 
 def upload_pronto(pronto):
     prontos_collection = MongoClient().prontosdb.prontos_collection
+    uploaded = None
     try:
         rez = prontos_collection.insert_one(pronto)
         print("Inserted pronto: {}".format(rez.inserted_id))
-        try_retrain_ml_model_now()
+        uploaded = True
     except pymongo.errors.DuplicateKeyError:
         print("Duplicated key error for problemReportId = {}".format(pronto["problemReportId"]))
+        uploaded = False
+
+    return uploaded
