@@ -25,7 +25,7 @@
     margin: 1vh auto;
 }
 
-.newPronto-text-label p {
+.newPronto-text-label p, .newPronto-list-label p {
     font-size: 1.5rem;
 }
 
@@ -48,4 +48,26 @@
 input:focus {
     outline: none;
     caret-color: #44a8ff;
+}
+
+.newPronto-list-label {
+    width: 100%;
+    margin: 1vh auto;
+    border-bottom: 1px solid grey;
+}
+
+.newPronto-list-add-button {
+    position: absolute;
+    height: 2rem;
+    right: 2vw;
+    transform: translateY(-130%);
+    cursor: pointer;
+}
+
+.newPronto-list-remove-button {
+    position: absolute;
+    height: 2rem;
+    right: 2vw;
+    margin: 10px 0px;
+    cursor: pointer;
 }

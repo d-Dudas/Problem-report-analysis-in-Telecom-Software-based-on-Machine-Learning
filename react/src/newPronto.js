@@ -9,6 +9,10 @@ import NextButton from './NextButton';
 import LoadingScreen from "./LoadingScreen";
 import ErrorScreen from "./ErrorScreen";
 
+// Images, icons
+import addIcon from './images/Add.png'
+import removeList from './images/remove.png'
+
 // React related
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,16 +27,30 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       description: '',
       feature: '',
       groupInCharge: '',
-      release: '',
+      release: [""],
       state: '',
-      saved: false
+      saved: false,
+      faultAnalysisId: [""],
+      attachedPRs: [""],
+      author: "",
+      build: "",
+      authorGroup: "",
+      informationrequestID: [""],
+      statusLog: "",
+      explanationforCorrectionNotNeeded: [""],
+      reasonWhyCorrectionisNotNeeded: [""],
+      faultAnalysisFeature: [""],
+      faultAnalysisGroupInCharge: [""],
+      stateChangedtoClosed: [""],
+      faultAnalysisTitle: [""]
     });
 
     const auxProntoList = prontoList.slice();
     const [descriere, setDescriere] = useState(formData.descriere);
     const navigate = useNavigate();
     const [error, setError] = useState(false);
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(false);
+    const mandatoryFields = ["problemReportId", "description", "feature", "groupInCharge", "title", "release"]
 
     function sendDataToFlask() {
       setloading(true);
@@ -67,7 +85,19 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
 
     function submitForm() {
       formData.description = descriere;
-      if(Object.keys(formData).filter(key => key !== "state" && key !== "saved").some(key => formData[key] === null || formData[key] === '' || formData[key] === undefined)) {
+      formData.release = [formData.release];
+      let err = false
+      for(let i = 0; i < mandatoryFields.length; i++) {
+        let key = mandatoryFields[i];
+        if(Array.isArray(formData[key])) {
+          if(formData[key].length <= 1 && formData[key][0] === "")
+            err = true;
+        } else {
+          if(formData[key] === null || formData[key] === '' || formData[key] === undefined)
+            err = true;
+        }
+      }
+      if(err) {
         setError(true);
       } else {
         formData.state = '';
@@ -83,39 +113,113 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       setLeft("77vw");
     }, []);
 
+    function handleAddList(event) {
+      const {name} = event.target;
+      let aux = formData[name].slice();
+      if(!aux.some(value => value === "" || value === null || value === undefined)) {
+        aux.push("");
+        setFormData({...formData, [name]: aux});
+      }
+    }
+
+    function handleListValue(index, event) {
+      const {name, value} = event.target;
+      let aux = formData[name].slice();
+      aux[index] = value;
+      setFormData({...formData, [name]: aux});
+    }
+
+    function handleRemoveList(index, event) {
+      const {name} = event.target;
+      let aux = formData[name].slice();
+      aux.splice(index, 1);
+      setFormData({...formData, [name]: aux});
+    }
+
+    function listInput(list) {
+      return (
+              <>
+                <label className='newPronto-list-label'>
+                  <p>{list}</p>
+                  <img src={addIcon} alt="" className="newPronto-list-add-button" name={list} onClick={handleAddList}></img>
+                </label>
+                {
+                  formData[list].map((element, index) => (
+                    <label>
+                      <input type="text"
+                              name={list}
+                              value={element}
+                              className='newPronto-text-label-input'
+                              placeholder={list}
+                              style={{margin: "10px 0px", width: "90%"}}
+                              onChange={(event) => handleListValue(index, event)}
+                      />
+                      <img src={removeList} alt='' className="newPronto-list-remove-button" name={list} onClick={(event) => handleRemoveList(index, event)}></img>
+                    </label>
+                  ))
+                }
+              </>
+      )
+    }
+
     return (
       <div>
         {loading ? <LoadingScreen /> : <></>}
         {error ?
-          <ErrorScreen errorMessage={"You should complete every field"} setError={setError} setTo={false} /> : <></>
+          <ErrorScreen errorMessage={"You should complete every mandatory field"} setError={setError} setTo={false} /> : <></>
         }
         <div class='newPronto-div'>
           <MainDiv headerText="Upload new pronto" result={false}>
             <form className='newPronto-form'>
                 <label className='newPronto-text-label'>
-                    <p>Title</p>
+                    <p>Title<span style={{color: "red"}}>*</span></p>
                     <input className='newPronto-text-label-input' placeholder='Title' type = "text" name = "title" value={formData.title} onChange={handleChange} ></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Problem report ID</p>
+                    <p>Author</p>
+                    <input className='newPronto-text-label-input' placeholder='Author' type = "text" name = "author" value={formData.author} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Author group</p>
+                    <input className='newPronto-text-label-input' placeholder='Author group' type = "text" name = "authorGroup" value={formData.authorGroup} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Problem report ID<span style={{color: "red"}}>*</span></p>
                     <input className='newPronto-text-label-input' placeholder='Problem report ID' type = "text" name = "problemReportId" value={formData.problemReportId} onChange={handleChange} ></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Feature</p>
+                    <p>Feature<span style={{color: "red"}}>*</span></p>
                     <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Group in charge</p>
+                    <p>Group in charge<span style={{color: "red"}}>*</span></p>
                     <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "groupInCharge" value={formData.gic} onChange={handleChange}></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Release</p>
+                    <p>Release<span style={{color: "red"}}>*</span></p>
                     <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Description</p>
+                    <p>Build</p>
+                    <input className='newPronto-text-label-input' placeholder='Build' type = "text" name = "build" value={formData.build} onChange={handleChange}></input>
+                </label>
+                {listInput("faultAnalysisId")}
+                {listInput("attachedPRs")}
+                {listInput("informationrequestID")}
+                <label className='newPronto-text-label'>
+                    <p>Status log</p>
+                    <input className='newPronto-text-label-input' placeholder='Status log' type = "text" name = "statusLog" value={formData.statusLog} onChange={handleChange}></input>
+                </label>
+                <label className='newPronto-text-label'>
+                    <p>Description<span style={{color: "red"}}>*</span></p>
                     <ReactQuill placeholder='Description' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
                 </label>
+                {listInput("explanationforCorrectionNotNeeded")}
+                {listInput("reasonWhyCorrectionisNotNeeded")}
+                {listInput("faultAnalysisFeature")}
+                {listInput("faultAnalysisGroupInCharge")}
+                {listInput("stateChangedtoClosed")}
+                {listInput("faultAnalysisTitle")}
             </form>
           </MainDiv>
         </div>
