@@ -66,7 +66,6 @@ def create_pronto_object(file):
 @app.route('/receive-data', methods=['POST'])
 def receive_data():
     data = request.json
-    print(data)
     data = create_pronto_object(data)
 
     return jsonify(data)
@@ -77,7 +76,6 @@ def save_pronto():
     aux = {}
     for key in valid_keys:
         aux[key] = data[key]
-    print(aux)
     upload_pronto(aux)
     data = {'msg': 'Pronto saved'}
 

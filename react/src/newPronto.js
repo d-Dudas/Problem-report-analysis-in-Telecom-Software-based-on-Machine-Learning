@@ -50,7 +50,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     const [loading, setloading] = useState(false);
-    const mandatoryFields = ["problemReportId", "description", "feature", "groupInCharge", "title", "release"]
+    const mandatoryFields = ["problemReportId", "description", "feature", "groupInCharge", "title", "release"];
 
     function sendDataToFlask() {
       setloading(true);
