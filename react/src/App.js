@@ -31,7 +31,7 @@ function App() {
     <>
       <Background />
       <Router>
-        <Dashboard pages={pages} pkey={pkey}/>
+        <Dashboard pages={pages} pkey={pkey} prontoList={prontoList}/>
         <Routes>
           <Route 
             path="/"

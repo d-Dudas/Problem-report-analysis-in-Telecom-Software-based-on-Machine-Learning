@@ -34,9 +34,9 @@
 
 .dashboard-items {
     position: absolute;
-    top: 12%;
+    top: 18%;
     width: 100%;
-    height: 88%;
+    height: 82%;
     overflow-y: scroll;
     overflow-x: overlay;
 }
@@ -46,6 +46,16 @@
     height: 5vh;
     display: flex;
     overflow: hidden;
+    animation: dashboard-item-animation 0.5s;
+}
+
+@keyframes dashboard-item-animation {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
 }
 
 .dashboard-item p, .dashboard-subitem p {
@@ -76,4 +86,54 @@
     background: rgba(0, 0, 0, 0.1);
     background-blend-mode: normal;
     cursor: pointer;    
+}
+
+.dashboard-search {
+    position: absolute;
+    top: 12%;
+    width: 100%;
+    height: 6%;
+    border-bottom: 1px solid white;
+}
+
+.dashboard-search-input-div {
+    position: absolute;
+    width: 70%;
+    height: 4vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    animation: dashboard-search-animation 1s;
+}
+
+@keyframes dashboard-search-animation {
+    from {
+        left: -100%;
+    }
+    80% {
+        left: 55%;
+    }
+    to {
+        left: 50%;
+    }
+}
+
+.dashboard-search-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 80%;
+    left: 80%;
+}
+
+.dashboard-search-input {
+    position: absolute;
+    width: 75%;
+    height: 100%;
+    left: 5%;
+    border: none;
+    background: none;
+    color: white;
 }
