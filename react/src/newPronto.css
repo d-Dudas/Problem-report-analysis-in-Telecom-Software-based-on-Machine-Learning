@@ -12,10 +12,20 @@
 .newPronto-form {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: relative;
+    width: 90%;
+    left: 5%;
+    height: auto;
     padding: 0px 2vmax;
+    padding-bottom: 2vh;
+    box-sizing: border-box;
+}
+
+.newPronto-form-bottom {
+    position: relative;
+    bottom: 0px;
+    height: 5vh;
+    width: 100%;
 }
 
 .newPronto-text-label {

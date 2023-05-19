@@ -48,6 +48,8 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
       setProntoList(auxList);
     }
 
+    console.log(prontoList[index])
+
     return(
       <div className='result-content'>
         <div className='main-div-result'>
@@ -58,13 +60,13 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
                   <p><strong>Release:</strong> {prontoList[index].release}</p>
                   <p><strong>Gic:</strong> {prontoList[index].groupInCharge}</p>
                   <p><strong>Descriere:</strong></p>{parse(prontoList[index].description)}
-                  <div className='result'><p><strong>Predicted state:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>
+                  <div className='result'><p><strong>{prontoList[index].presentInDB ? "State" : "Predicted state"}:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>
               </div>
           </MainDiv>
         </div>
         <div className='save-pronto-div'>
           <MainDiv headerText={"Accuracy"} result={false}>
-            <p className='accuracy-text1'>Our machine learnig model currently has a prediction accuracy of:</p>
+            <p className='accuracy-text1'>The accuracy for this prediction is:</p>
             <div className='d-chart'>
               <p className='accuracy-value'>{accuracy + "%"}</p>
               <Chart
@@ -72,10 +74,11 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
                 data={data}
                 options={options}
                 width={"100%"}
-                height={"30vh"}
+                height={"40vh"}
               />
             </div>
             {
+              prontoList[index].presentInDB ? <div className='thx-msg'>This pronto is present in our database.</div> :
               !prontoList[index].isValid ? <div className='thx-msg'>This pronto has empty fields, so it can't be saved</div> :
               prontoList[index].saved ? <div className='thx-msg'>Thanks for helping us improve our algorithm!</div> :
                             <div className='save-pronto-question'>

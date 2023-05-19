@@ -89,6 +89,10 @@ def encode_data(data):
 
 def get_fast_prediction(pronto):
 
+    pronto_from_db = rdb.search_pronto_by_problemReportId(pronto["problemReportId"])
+    if pronto_from_db:
+        return pronto["state"], 1, True
+
     vectorizer = sld.deserialize_object("vectorizer.pickle")
     dict_vectorizer = sld.deserialize_object("dict_vectorizer.pickle")
     label_encoder = sld.deserialize_object("label_encoder.pickle")
@@ -107,9 +111,7 @@ def get_fast_prediction(pronto):
     # "translate" prediction
     prediction = label_encoder.inverse_transform(prediction)
 
-    try_retrain_ml_model()
-
-    return prediction[0], accuracy
+    return prediction[0], accuracy, False
 
 def try_retrain_ml_model():
     global retrain_ml_model_thread

@@ -40,3 +40,14 @@ def get_encoded_state(prontos_collection = MongoClient().prontosdb.prontos_colle
     for pronto in prontos_collection.find({}):
        state_list.append(pronto["state"])
     return state_list
+
+def search_prontos_by_problemReportId_or_title(key, prontos_collection = MongoClient().prontosdb.prontos_collection):
+    prontos=[]
+    for pronto in prontos_collection.find({}):
+        if key in pronto["problemReportId"] or key in pronto["title"]:
+            prontos.append(pronto)
+    
+    return prontos
+
+def search_pronto_by_problemReportId(problemReportId, prontos_collection = MongoClient().prontosdb.prontos_collection):
+    return prontos_collection.find_one({"problemReportId": problemReportId})

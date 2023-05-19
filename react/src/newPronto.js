@@ -221,6 +221,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
                 {listInput("stateChangedtoClosed")}
                 {listInput("faultAnalysisTitle")}
             </form>
+            <div className='newPronto-form-bottom'></div>
           </MainDiv>
         </div>
         <div style={{left: left, transition: "1s ease", bottom: "5vh", position: "absolute"}}>

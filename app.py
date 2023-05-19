@@ -55,11 +55,12 @@ def create_pronto_object(file):
     for key in file.keys():
         pronto[key] = file[key]
 
-    state, accuracy = get_fast_prediction(pronto)
+    state, accuracy, already_in_db = get_fast_prediction(pronto)
     pronto["state"] = state
     pronto["accuracy"] = accuracy
     pronto["saved"] = False
     pronto["isValid"] = is_valid_pronto(file)
+    pronto["presentInDB"] = already_in_db
 
     return pronto
 

@@ -1,5 +1,7 @@
 .result-div {
-    width: 100%;
+    position: absolute;
+    width: 90%;
+    left: 5%;
     min-height: 100%;
     padding: 1vh 1vw;
 }
@@ -51,7 +53,7 @@
     font-size: 1.8rem;
     z-index: 5;
     text-align: center;
-    top: 2%;
+    top: 5%;
 }
 
 .accuracy-value {
@@ -80,7 +82,7 @@
     font-size: 1.8rem;
     z-index: 5;
     text-align: center;
-    top: 10%;
+    top: 25%;
 }
 
 .accuracy-button {
