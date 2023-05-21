@@ -48,12 +48,10 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
       setProntoList(auxList);
     }
 
-    console.log(prontoList[index])
-
     return(
       <div className='result-content'>
         <div className='main-div-result'>
-          <MainDiv headerText={"Prediction"} result={true}>
+          <MainDiv headerText={prontoList[index].presentInDB ? "Pronto" : "Prediction"} result={true}>
               <div className='result-div'>
                   <p><strong>Titlu:</strong> {prontoList[index].title}</p>
                   <p><strong>Feature:</strong> {prontoList[index].feature}</p>

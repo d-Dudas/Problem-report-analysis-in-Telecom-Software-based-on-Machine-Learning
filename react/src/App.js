@@ -22,6 +22,11 @@ function App() {
       key: '/upload',
       name: 'Upload pronto',
       subpages: []
+    },
+    {
+      key: '/database',
+      name: 'From database',
+      subpages: []
     }
   ]);
 
@@ -31,7 +36,7 @@ function App() {
     <>
       <Background />
       <Router>
-        <Dashboard pages={pages} pkey={pkey} prontoList={prontoList}/>
+        <Dashboard pages={pages} setPages={setPages} pkey={pkey} prontoList={prontoList} setProntoList={setProntoList}/>
         <Routes>
           <Route 
             path="/"

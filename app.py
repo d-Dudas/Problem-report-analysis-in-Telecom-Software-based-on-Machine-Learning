@@ -1,6 +1,7 @@
 import json
 from flask import Flask, jsonify, request
 from process_data import get_fast_prediction, upload_pronto
+from read_data_from_db import search_prontos_by_problemReportId_or_title
 
 app = Flask(__name__)
 
@@ -64,6 +65,19 @@ def create_pronto_object(file):
 
     return pronto
 
+def prepare_pronto_from_db(pronto):
+    prontoaux = {}
+    for vkey in valid_keys:
+        prontoaux[vkey] = pronto[vkey]
+    prontoaux['state'] = pronto['state']
+    prontoaux['accuracy'] = 1
+    prontoaux['saved'] = True
+    prontoaux['isValid'] = True
+    prontoaux['presentInDB'] = True
+
+    return prontoaux
+
+
 @app.route('/receive-data', methods=['POST'])
 def receive_data():
     data = request.json
@@ -96,6 +110,15 @@ def receive_file():
             if is_valid_for_prediction(file_contents):
                 response.append(create_pronto_object(file_contents))
     return(response)
+
+@app.route('/search-in-db', methods=['POST'])
+def search_in_db():
+    key = request.json
+    prontos = search_prontos_by_problemReportId_or_title(key)
+    for i in range(len(prontos)):
+        prontos[i] = prepare_pronto_from_db(prontos[i])
+
+    return prontos
 
 if __name__ == '__main__':
     app.run()
