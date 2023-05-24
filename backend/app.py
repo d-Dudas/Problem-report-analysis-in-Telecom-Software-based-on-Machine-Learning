@@ -118,7 +118,7 @@ def search_in_db():
     for i in range(len(prontos)):
         prontos[i] = prepare_pronto_from_db(prontos[i])
 
-    return prontos
+    return jsonify(prontos)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host='0.0.0.0')

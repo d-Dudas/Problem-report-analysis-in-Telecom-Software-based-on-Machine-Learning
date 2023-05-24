@@ -46,6 +46,19 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
         return false;
     };
 
+    function inProntoList(pronto) {
+        const auxProntoList = prontoList.slice();
+        const compareField = 'problemReportId';
+        for(let i = 0; i < auxProntoList.length; i++) {
+            if(auxProntoList[i][compareField] === pronto[compareField])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     const loadFromDB = () => {
         if(dbSearch !== '') {
             fetch('/search-in-db', {
@@ -57,17 +70,26 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
               })
               .then(response => response.json())
               .then(data => {
-                let auxProntoList = prontoList.slice();
+                const auxProntoList = prontoList.slice();
+                const auxPages = pages.slice();
+                const databaseProntos = auxPages[2];
+
                 for(let i = 0; i < data.length; i++){
-                    if(auxProntoList.filter(item => (item['problemReportId'] == data[i]['problemReportId'])) == 0) {
+                    if(!inProntoList(data[i])) {
                         auxProntoList.push(data[i]);
                         let key = "/" + data[i].problemReportId;
                         let name = data[i].problemReportId;
-                        pages[2].subpages.push({key: key, name: name});
+                        const newSubpage = {
+                            key: key,
+                            name: name
+                          };
+                        databaseProntos.subpages.push(newSubpage);
                     }
                 }
+                
+                auxPages[2] = databaseProntos;
                 setProntoList(auxProntoList);
-                setPages(pages);
+                setPages(auxPages);
               })
               .catch(error => console.error(error));
         }

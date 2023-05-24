@@ -115,7 +115,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
               body: formData,
             });
             const data = await response.json();
-            if(data.length == 0) {
+            if(data.length === 0) {
                 setloading(false);
                 setInvalidProntoError(true);
             } else {

@@ -5,7 +5,7 @@ from pymongo import MongoClient
 # Make connection to the mongoDB
 # If the database and collection doesn't exists,
 # Both will be created
-prontos_collection = MongoClient().prontosdb.prontos_collection
+prontos_collection = MongoClient('mongodb://db:27017').prontosdb.prontos_collection
 
 # After the documents were added, create a unique index, if doesn't exists
 # json_file - the (absolute) path to the .json file with prontos

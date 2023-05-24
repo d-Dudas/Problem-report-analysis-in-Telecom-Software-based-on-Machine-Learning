@@ -10,6 +10,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+nltk.download('words')
+nltk.download('punkt')
+
 retrain_ml_model_thread = None
 recently_added_prontos = sld.deserialize_object("recently_uploaded_prontos.pickle")
 # When 5 or more prontos where uploaded, then retrain the model
@@ -122,19 +125,15 @@ def try_retrain_ml_model():
         print("The ML model is already updating...")
 
 def retrain_ml_model():
-    # Read the data from database and save the new processed data
+    if rdb.number_of_prontos_in_database <= 1:
+        return
+    
     print("Retraining ML model")
     title_and_desc_vec, vectorizer = get_title_desc_vector()
-    sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)
-    sld.serialize_object("vectorizer.pickle", vectorizer)
 
     useful_feature_list, dict_vectorizer = get_dict_vector(rdb.get_useful_features_list())
-    sld.save_sparse_matrix("useful_feature_list.npz", useful_feature_list)
-    sld.serialize_object("dict_vectorizer.pickle", dict_vectorizer)
 
     encoded_states, label_encoder = encode_data(rdb.get_encoded_state())
-    sld.serialize_object("encoded_states.pickle", encoded_states)
-    sld.serialize_object("label_encoder.pickle", label_encoder)
 
     # Prepare the input for the ml model
     model_input = sp.hstack([title_and_desc_vec, useful_feature_list])
@@ -147,14 +146,20 @@ def retrain_ml_model():
     ml_model.fit(x_train, y_train)
     accuracy = ml_model.score(x_test, y_test)
     prev_accuracy = sld.deserialize_object("accuracy.pickle")
+    
     if accuracy > prev_accuracy:
         print("Better model trained.")
+        sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)
+        sld.serialize_object("vectorizer.pickle", vectorizer)
+        sld.save_sparse_matrix("useful_feature_list.npz", useful_feature_list)
+        sld.serialize_object("dict_vectorizer.pickle", dict_vectorizer)
+        sld.serialize_object("encoded_states.pickle", encoded_states)
+        sld.serialize_object("label_encoder.pickle", label_encoder)
         sld.serialize_object("MLmodel.pickle", ml_model)
         sld.serialize_object("accuracy.pickle", accuracy)
     else :
-        print("Retrained model not accurate enough.")
+        print("Retrained model is not better. Won't be saved.")
 
-    print("ML model retrained.")
     print("Accuracy: {}".format(accuracy))
 
 def upload_pronto(pronto):
