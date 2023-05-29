@@ -64,7 +64,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
 
     function notInProntoList(pronto) {
         for(let i = 0; i < auxProntoList.length; i++) {
-            if(auxProntoList[i].problemReportId === pronto.problemReportId)
+            if(auxProntoList[i].title === pronto.title)
                 return(false);
         }
         return(true);
@@ -88,8 +88,8 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
         // Rebuild the subpages list
         let subpages = dashboard_content[1].subpages;
         for(let i = 0; i < data.length; i++) {
-            let key = "/" + data[i].problemReportId;
-            let name = data[i].problemReportId;
+            let name = data[i].title;
+            let key = "/" + name;
             if(notInSubpagesList({key: key, name: name}))
                 subpages.push({key: key, name: name})
         }
@@ -99,7 +99,7 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
         setDash(dashboard_content);
 
         // Go to the most recently addded pronto
-        navigate('/' + auxProntoList[auxProntoList.length-1].problemReportId);
+        navigate('/' + auxProntoList[auxProntoList.length-1].title);
     }
 
     async function uploadFiles() {
@@ -133,9 +133,9 @@ function UploadPage({setKey, dashboard_content, setDash, setProntoList, prontoLi
             : <></>
         }
         <div className='upload-page-content'>
-            {loading ? <LoadingScreen /> : <></>}
+            {loading ? <LoadingScreen /> : null}
             <div className={uploadedFiles.length > 0 ? 'dropzone-div' : 'dropzone-div-alone'}>
-                <MainDiv headerText="Upload new pronto" result={false}>
+                <MainDiv headerText="Get new prediction" result={false}>
                     <div 
                         className='dropzone'
                         onDragOver={handleDragOver}

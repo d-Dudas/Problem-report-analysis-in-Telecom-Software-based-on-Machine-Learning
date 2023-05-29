@@ -54,14 +54,14 @@ function App() {
           <Route path="/upload" element={<UploadPage setKey={setKey} dashboard_content={pages} setDash={setPages} prontoList={prontoList} setProntoList={setProntoList}/>} />
           {prontoList.map((pronto, index) => {
             return(
-                <Route path={"/" + pronto.problemReportId}
+                <Route path={"/" + pronto.title}
                   element={
                     <Result 
                       prontoList={prontoList}
                       setProntoList={setProntoList}
                       index={index}
                       setKey={setKey}
-                      pkey={"/" + pronto.problemReportId}
+                      pkey={"/" + pronto.title}
                     />
                   }
                 />

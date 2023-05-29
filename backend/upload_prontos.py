@@ -12,16 +12,16 @@ def upload_prontos(data):
             rez = prontos_collection.insert_one(value)
             print("Inserted object: {}".format(rez.inserted_id))
         except pymongo.errors.DuplicateKeyError:
-            print("Duplicated key error for problemReportId = {}".format(value["problemReportId"]))
+            print("Duplicated key error for = {}".format(value['title']))
 
     # Verify if there is a unique index set on 'problemReportId'
     # If it is, then exit
     for index in prontos_collection.list_indexes():
-        if 'problemReportId' in index['key']:
+        if 'description' in index['key']:
             sys.exit(0)
 
     # Else, set the unique index
-    prontos_collection.create_index([('problemReportId', pymongo.ASCENDING)], unique=True)
+    prontos_collection.create_index([('description', pymongo.ASCENDING)], unique=True)
 
 
 

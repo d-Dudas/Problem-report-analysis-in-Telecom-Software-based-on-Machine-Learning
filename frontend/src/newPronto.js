@@ -12,6 +12,7 @@ import ErrorScreen from "./ErrorScreen";
 // Images, icons
 import addIcon from './images/Add.png'
 import removeList from './images/remove.png'
+import downIcon from './images/downIcon.png'
 
 // React related
 import { useEffect, useState } from 'react';
@@ -27,22 +28,22 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       description: '',
       feature: '',
       groupInCharge: '',
-      release: [""],
+      release: "",
       state: '',
       saved: false,
-      faultAnalysisId: [""],
-      attachedPRs: [""],
+      faultAnalysisId: [],
+      attachedPRs: [],
       author: "",
       build: "",
       authorGroup: "",
-      informationrequestID: [""],
+      informationrequestID: [],
       statusLog: "",
-      explanationforCorrectionNotNeeded: [""],
-      reasonWhyCorrectionisNotNeeded: [""],
-      faultAnalysisFeature: [""],
-      faultAnalysisGroupInCharge: [""],
-      stateChangedtoClosed: [""],
-      faultAnalysisTitle: [""]
+      explanationforCorrectionNotNeeded: [],
+      reasonWhyCorrectionisNotNeeded: [],
+      faultAnalysisFeature: [],
+      faultAnalysisGroupInCharge: [],
+      stateChangedtoClosed: [],
+      faultAnalysisTitle: []
     });
 
     const auxProntoList = prontoList.slice();
@@ -50,7 +51,8 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     const [loading, setloading] = useState(false);
-    const mandatoryFields = ["problemReportId", "description", "feature", "groupInCharge", "title", "release"];
+    const mandatoryFields = ["description", "title"];
+    const [showOptional, setShowOptional] = useState(false);
 
     function sendDataToFlask() {
       setloading(true);
@@ -67,13 +69,13 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
         setProntoList(auxProntoList);
 
         // Rebuild the subpages list
-        let key = "/" + data.problemReportId;
-        let name = data.problemReportId;
+        let name = data.title;
+        let key = "/" + name;
         dashboard_content[0].subpages.push({key: key, name: name});
 
         setProntoList(auxProntoList);
         setDash(dashboard_content);
-        navigate('/' + auxProntoList[auxProntoList.length-1].problemReportId);
+        navigate('/' + auxProntoList[auxProntoList.length-1].title);
       })
       .catch(error => console.error(error));
     }
@@ -136,6 +138,10 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       setFormData({...formData, [name]: aux});
     }
 
+    function handleOptionalFields() {
+      setShowOptional(!showOptional);
+    }
+
     function listInput(list) {
       return (
               <>
@@ -162,66 +168,73 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       )
     }
 
+    const optionalFields = () => {
+      return (
+          <div>
+          <label className='newPronto-text-label'>
+              <p>Author</p>
+              <input className='newPronto-text-label-input' placeholder='Author' type = "text" name = "author" value={formData.author} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Author group</p>
+              <input className='newPronto-text-label-input' placeholder='Author group' type = "text" name = "authorGroup" value={formData.authorGroup} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Feature</p>
+              <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Group in charge</p>
+              <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "groupInCharge" value={formData.gic} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Release</p>
+              <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Build</p>
+              <input className='newPronto-text-label-input' placeholder='Build' type = "text" name = "build" value={formData.build} onChange={handleChange}></input>
+          </label>
+          <label className='newPronto-text-label'>
+              <p>Status log</p>
+              <input className='newPronto-text-label-input' placeholder='Status log' type = "text" name = "statusLog" value={formData.statusLog} onChange={handleChange}></input>
+          </label>
+          {listInput("faultAnalysisId")}
+          {listInput("attachedPRs")}
+          {listInput("informationrequestID")}
+          {listInput("explanationforCorrectionNotNeeded")}
+          {listInput("reasonWhyCorrectionisNotNeeded")}
+          {listInput("faultAnalysisFeature")}
+          {listInput("faultAnalysisGroupInCharge")}
+          {listInput("stateChangedtoClosed")}
+          {listInput("faultAnalysisTitle")}
+        </div>
+      )
+    }
+
     return (
       <div>
-        {loading ? <LoadingScreen /> : <></>}
+        {loading ? <LoadingScreen /> : null}
         {error ?
-          <ErrorScreen errorMessage={"You should complete every mandatory field"} setError={setError} setTo={false} /> : <></>
+          <ErrorScreen errorMessage={"Title and description are mandatory"} setError={setError} setTo={false} /> : null
         }
         <div class='newPronto-div'>
-          <MainDiv headerText="Upload new pronto" result={false}>
-            <form className='newPronto-form'>
+          <MainDiv headerText="Get new prediction" result={false}>
+            <form className='newPronto-form' style={!showOptional ? {top: "10%"} : null}>
                 <label className='newPronto-text-label'>
-                    <p>Title<span style={{color: "red"}}>*</span></p>
+                    <p>Title</p>
                     <input className='newPronto-text-label-input' placeholder='Title' type = "text" name = "title" value={formData.title} onChange={handleChange} ></input>
                 </label>
                 <label className='newPronto-text-label'>
-                    <p>Author</p>
-                    <input className='newPronto-text-label-input' placeholder='Author' type = "text" name = "author" value={formData.author} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Author group</p>
-                    <input className='newPronto-text-label-input' placeholder='Author group' type = "text" name = "authorGroup" value={formData.authorGroup} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Problem report ID<span style={{color: "red"}}>*</span></p>
-                    <input className='newPronto-text-label-input' placeholder='Problem report ID' type = "text" name = "problemReportId" value={formData.problemReportId} onChange={handleChange} ></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Feature<span style={{color: "red"}}>*</span></p>
-                    <input className='newPronto-text-label-input' placeholder='Feature' type = "text" name = "feature" value={formData.feature} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Group in charge<span style={{color: "red"}}>*</span></p>
-                    <input className='newPronto-text-label-input' placeholder='Group in charge' type = "text" name = "groupInCharge" value={formData.gic} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Release<span style={{color: "red"}}>*</span></p>
-                    <input className='newPronto-text-label-input' placeholder='Release' type = "text" name = "release" value={formData.release} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Build</p>
-                    <input className='newPronto-text-label-input' placeholder='Build' type = "text" name = "build" value={formData.build} onChange={handleChange}></input>
-                </label>
-                {listInput("faultAnalysisId")}
-                {listInput("attachedPRs")}
-                {listInput("informationrequestID")}
-                <label className='newPronto-text-label'>
-                    <p>Status log</p>
-                    <input className='newPronto-text-label-input' placeholder='Status log' type = "text" name = "statusLog" value={formData.statusLog} onChange={handleChange}></input>
-                </label>
-                <label className='newPronto-text-label'>
-                    <p>Description<span style={{color: "red"}}>*</span></p>
+                    <p>Description</p>
                     <ReactQuill placeholder='Description' className='newPronto-descriere' theme="snow" name = "descriere" value={descriere} onChange={setDescriere}/>
                 </label>
-                {listInput("explanationforCorrectionNotNeeded")}
-                {listInput("reasonWhyCorrectionisNotNeeded")}
-                {listInput("faultAnalysisFeature")}
-                {listInput("faultAnalysisGroupInCharge")}
-                {listInput("stateChangedtoClosed")}
-                {listInput("faultAnalysisTitle")}
+                <div className="newPronto-showOptional-div">
+                  <p className="newPronto-showOptional-text">{showOptional ? "Hide" : "Show"} optional fields</p>
+                  <img src={downIcon} alt='' className="newPronto-showOptional-button" onClick={handleOptionalFields} style={showOptional ? {rotate: "180deg", transform: "translateX(50%)"} : {rotate: "0deg", transform: "translateX(-50%)"}}></img>
+                </div>
+                {showOptional ? optionalFields() : null}
             </form>
-            <div className='newPronto-form-bottom'></div>
           </MainDiv>
         </div>
         <div style={{left: left, transition: "1s ease", bottom: "5vh", position: "absolute"}}>

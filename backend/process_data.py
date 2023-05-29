@@ -157,6 +157,7 @@ def retrain_ml_model():
         sld.serialize_object("label_encoder.pickle", label_encoder)
         sld.serialize_object("MLmodel.pickle", ml_model)
         sld.serialize_object("accuracy.pickle", accuracy)
+        sld.serialize_object("true_label.pickle", y_test)
     else :
         print("Retrained model is not better. Won't be saved.")
 

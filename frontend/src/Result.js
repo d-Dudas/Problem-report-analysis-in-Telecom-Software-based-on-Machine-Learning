@@ -53,10 +53,10 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
         <div className='main-div-result'>
           <MainDiv headerText={prontoList[index].presentInDB ? "Pronto" : "Prediction"} result={true}>
               <div className='result-div'>
-                  <p><strong>Titlu:</strong> {prontoList[index].title}</p>
-                  <p><strong>Feature:</strong> {prontoList[index].feature}</p>
-                  <p><strong>Release:</strong> {prontoList[index].release}</p>
-                  <p><strong>Gic:</strong> {prontoList[index].groupInCharge}</p>
+                  {prontoList[index].title != '' ? <p><strong>Titlu:</strong> {prontoList[index].title}</p> : null}
+                  {prontoList[index].feature != '' ? <p><strong>Feature:</strong> {prontoList[index].feature}</p> : null}
+                  {prontoList[index].release != '' ? <p><strong>Release:</strong> {prontoList[index].release}</p> : null}
+                  {prontoList[index].groupInCharge != '' ? <p><strong>Group in charge:</strong> {prontoList[index].groupInCharge}</p> : null}
                   <p><strong>Descriere:</strong></p>{parse(prontoList[index].description)}
                   <div className='result'><p><strong>{prontoList[index].presentInDB ? "State" : "Predicted state"}:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>
               </div>

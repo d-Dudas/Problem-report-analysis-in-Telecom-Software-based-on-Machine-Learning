@@ -7,10 +7,7 @@ app = Flask(__name__)
 
 necessary_keys = [
                   "description",
-                  "feature",
-                  "groupInCharge",
                   "title",
-                  "release"
                   ]
 
 valid_keys = ["problemReportId",

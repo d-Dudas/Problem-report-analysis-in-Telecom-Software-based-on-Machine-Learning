@@ -34,7 +34,7 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
 
     const checkFilterInObject = (obj, filter) => {
         const dashboard_item_name = obj.name;
-        const pronto = prontoList.filter(p => p.problemReportId === dashboard_item_name);
+        const pronto = prontoList.filter(p => p.title === dashboard_item_name);
         const values = Object.values(pronto[0]);
       
         for (let i = 0; i < values.length; i++) {
@@ -48,7 +48,7 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
 
     function inProntoList(pronto) {
         const auxProntoList = prontoList.slice();
-        const compareField = 'problemReportId';
+        const compareField = 'title';
         for(let i = 0; i < auxProntoList.length; i++) {
             if(auxProntoList[i][compareField] === pronto[compareField])
             {
@@ -77,8 +77,8 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
                 for(let i = 0; i < data.length; i++){
                     if(!inProntoList(data[i])) {
                         auxProntoList.push(data[i]);
-                        let key = "/" + data[i].problemReportId;
-                        let name = data[i].problemReportId;
+                        let name = data[i].title;
+                        let key = "/" + name;
                         const newSubpage = {
                             key: key,
                             name: name
@@ -98,7 +98,7 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
     return (
         <div className="dashboard-body">
             <div className="dashboard-header">Dashboard</div>
-            {pages.filter(item => item.subpages.length > 1).length <= 0 ? <></> :
+            {pages.filter(item => item.subpages.length > 1).length <= 0 ? null :
                 <div className="dashboard-search">
                     <div className="dashboard-search-input-div">
                         <img className="dashboard-search-icon" src={searchIcon} alt=''></img>

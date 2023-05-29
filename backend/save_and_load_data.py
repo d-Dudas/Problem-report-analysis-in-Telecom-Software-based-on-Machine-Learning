@@ -32,6 +32,6 @@ def upload_pronto(pronto):
         print("Inserted pronto: {}".format(rez.inserted_id))
         uploaded = True
     except pymongo.errors.DuplicateKeyError:
-        print("Duplicated key error for problemReportId = {}".format(pronto["problemReportId"]))
+        print("Duplicated key error for = {}".format(value['title']))
 
     return uploaded

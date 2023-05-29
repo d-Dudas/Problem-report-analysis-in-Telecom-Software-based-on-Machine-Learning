@@ -10,6 +10,7 @@
 }
 
 .newPronto-form {
+    top: 0px;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -19,6 +20,7 @@
     padding: 0px 2vmax;
     padding-bottom: 2vh;
     box-sizing: border-box;
+    transition: top 0.3s ease-in;
 }
 
 .newPronto-form-bottom {
@@ -50,9 +52,9 @@
 }
 
 .newPronto-descriere {
-    margin-bottom: 10vh;
     box-sizing: border-box;
-    min-height: 15vh;
+    height: 30vh;
+    margin-bottom: 5vh;
 }
 
 input:focus {
@@ -79,5 +81,28 @@ input:focus {
     height: 2rem;
     right: 2vw;
     margin: 10px 0px;
+    cursor: pointer;
+}
+
+.newPronto-showOptional-div {
+    width: 100%;
+    border-top: 1px solid grey;
+    height: 10vh;
+}
+
+.newPronto-showOptional-text {
+    position: absolute;
+    margin-top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.newPronto-showOptional-button {
+    position: absolute;
+    margin-top: 7%;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4vh;
+    width: 3vw;
     cursor: pointer;
 }
