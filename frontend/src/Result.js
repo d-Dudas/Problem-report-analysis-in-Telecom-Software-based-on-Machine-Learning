@@ -20,7 +20,7 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
       ["", accuracy],
       ["", (100.0 - accuracy)]
     ];
-    
+
     const options = {
       title: "",
       is3D: false,
@@ -53,9 +53,13 @@ function Result({prontoList, setProntoList, index, setKey, pkey}){
         <div className='main-div-result'>
           <MainDiv headerText={prontoList[index].presentInDB ? "Pronto" : "Prediction"} result={true}>
               <div className='result-div'>
+                  {/* eslint-disable-next-line */}
                   {prontoList[index].title != '' ? <p><strong>Titlu:</strong> {prontoList[index].title}</p> : null}
+                  {/* eslint-disable-next-line */}
                   {prontoList[index].feature != '' ? <p><strong>Feature:</strong> {prontoList[index].feature}</p> : null}
+                  {/* eslint-disable-next-line */}
                   {prontoList[index].release != '' ? <p><strong>Release:</strong> {prontoList[index].release}</p> : null}
+                  {/* eslint-disable-next-line */}
                   {prontoList[index].groupInCharge != '' ? <p><strong>Group in charge:</strong> {prontoList[index].groupInCharge}</p> : null}
                   <p><strong>Descriere:</strong></p>{parse(prontoList[index].description)}
                   <div className='result'><p><strong>{prontoList[index].presentInDB ? "State" : "Predicted state"}:</strong></p> {prontoList[index].state === '' ? <LoadingDots /> : <p>{prontoList[index].state}</p>}</div>

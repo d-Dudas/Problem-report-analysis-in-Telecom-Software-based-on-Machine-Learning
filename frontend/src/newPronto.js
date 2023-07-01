@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoList}) {
-  
+
     setKey('/');
 
     const [formData, setFormData] = useState({
@@ -28,16 +28,16 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       description: '',
       feature: '',
       groupInCharge: '',
-      release: "",
+      release: '',
       state: '',
       saved: false,
       faultAnalysisId: [],
       attachedPRs: [],
-      author: "",
-      build: "",
-      authorGroup: "",
+      author: '',
+      build: '',
+      authorGroup: '',
       informationrequestID: [],
-      statusLog: "",
+      statusLog: '',
       explanationforCorrectionNotNeeded: [],
       reasonWhyCorrectionisNotNeeded: [],
       faultAnalysisFeature: [],
@@ -79,7 +79,7 @@ function NewPronto({setKey, dashboard_content, setDash, setProntoList, prontoLis
       })
       .catch(error => console.error(error));
     }
-    
+
     const handleChange = (event) => {
       const { name, value } = event.target;
       setFormData({ ...formData, [name]: value });

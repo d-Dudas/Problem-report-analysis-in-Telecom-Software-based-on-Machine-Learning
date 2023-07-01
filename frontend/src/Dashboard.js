@@ -14,7 +14,7 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
     const navigate = useNavigate();
     const [filter, setFilter] = useState("");
     const [dbSearch, setDBSearch] = useState("");
-    
+
     function handleClick(event) {
         const path = event.target.closest('div').getAttribute('pkey');
         if(path !== '/database'){
@@ -36,13 +36,11 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
         const dashboard_item_name = obj.name;
         const pronto = prontoList.filter(p => p.title === dashboard_item_name);
         const values = Object.values(pronto[0]);
-      
         for (let i = 0; i < values.length; i++) {
           if (('' + values[i]).toLowerCase().includes(filter.toLowerCase())) {
             return true;
           }
         }
-      
         return false;
     };
 
@@ -86,7 +84,6 @@ function Dashboard({pages, setPages, pkey, prontoList, setProntoList}) {
                         databaseProntos.subpages.push(newSubpage);
                     }
                 }
-                
                 auxPages[2] = databaseProntos;
                 setProntoList(auxProntoList);
                 setPages(auxPages);

@@ -37,7 +37,6 @@ def is_valid_for_prediction(pronto):
     for key in necessary_keys:
         if key not in list(pronto.keys()):
             is_valid = False
-    
     return is_valid
 
 def is_valid_pronto(pronto):
@@ -45,10 +44,9 @@ def is_valid_pronto(pronto):
     for key in valid_keys:
         if key not in list(pronto.keys()):
             is_valid = False
-    
     return is_valid
 
-def create_pronto_object(file):  
+def create_pronto_object(file):
     pronto = {}
     for key in file.keys():
         pronto[key] = file[key]

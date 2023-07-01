@@ -72,9 +72,15 @@
     flex-direction: column;
     align-items: center;
     overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
     column-gap: 1vh;
     /* border-bottom: 1px dashed grey; */
     box-shadow: inset 0px -5px 5px rgba(0, 0, 0, 0.308);
+}
+
+.files-list::-webkit-scrollbar {
+    display: none;
 }
 
 .uploaded-file-div {

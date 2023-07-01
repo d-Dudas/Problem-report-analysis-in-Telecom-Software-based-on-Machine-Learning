@@ -10,9 +10,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-nltk.download('words')
-nltk.download('punkt')
-
 retrain_ml_model_thread = None
 recently_added_prontos = sld.deserialize_object("recently_uploaded_prontos.pickle")
 # When 5 or more prontos where uploaded, then retrain the model
@@ -37,7 +34,6 @@ def stemm_tokens(tokenized_descriptions, stemmer = nltk.PorterStemmer()):
     stemmer = SnowballStemmer("english")
     for iter in tokenized_descriptions:
         stemmed_descriptions.append([stemmer.stem(t) for t in iter])
-
     return stemmed_descriptions
 
 # Rejoin stemmed tokens
@@ -45,7 +41,6 @@ def rejoin_processed_tokens(tokens_list):
     stemmed_text = []
     for tokens in tokens_list:
         stemmed_text.append(" ".join(tokens))
-    
     return stemmed_text
 
 # stemmed_text - result of rejoin_processed_tokens()
@@ -128,7 +123,7 @@ def try_retrain_ml_model():
 def retrain_ml_model():
     if rdb.number_of_prontos_in_database <= 1:
         return
-    
+
     print("Retraining ML model")
     title_and_desc_vec, vectorizer = get_title_desc_vector()
 
@@ -147,7 +142,7 @@ def retrain_ml_model():
     ml_model.fit(x_train, y_train)
     accuracy = ml_model.score(x_test, y_test)
     prev_accuracy = sld.deserialize_object("accuracy.pickle")
-    
+
     if accuracy > prev_accuracy:
         print("Better model trained.")
         sld.save_sparse_matrix("title_and_desc_vec.npz", title_and_desc_vec)

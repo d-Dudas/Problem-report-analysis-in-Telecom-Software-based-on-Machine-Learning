@@ -55,6 +55,7 @@
     box-sizing: border-box;
     height: 30vh;
     margin-bottom: 5vh;
+    font-size: 0.6rem;
 }
 
 input:focus {

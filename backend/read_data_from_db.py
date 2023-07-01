@@ -11,7 +11,6 @@ def get_tokenized_descriptions(prontos_collection = MongoClient(database_port).p
     tokenized_prontos_descriptions = []
     for pronto in prontos_collection.find({}):
         tokenized_prontos_descriptions.append(nltk.word_tokenize(pronto["description"]))
-    
     return tokenized_prontos_descriptions
 
 def get_tokenized_title_and_description(prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):
@@ -19,7 +18,6 @@ def get_tokenized_title_and_description(prontos_collection = MongoClient(databas
     for pronto in prontos_collection.find({}):
         aux = pronto["title"] + " " + pronto["description"]
         tokenized_titles_descriptions.append(nltk.word_tokenize(aux))
-    
     return tokenized_titles_descriptions
 
 def get_useful_features_list(prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):
@@ -30,7 +28,6 @@ def get_useful_features_list(prontos_collection = MongoClient(database_port).pro
         useful_data["groupInCharge"] = "" if pronto["groupInCharge"] == None else pronto["groupInCharge"]
         useful_data["release"] = "" if pronto["release"][0] == None else pronto["release"][0]
         data_list.append(useful_data)
-
     return data_list
 
 def get_gic(prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):
@@ -50,7 +47,6 @@ def search_prontos_by_problemReportId_or_title(key, prontos_collection = MongoCl
     for pronto in prontos_collection.find({}):
         if key in pronto["problemReportId"] or key in pronto["title"]:
             prontos.append(pronto)
-    
     return prontos
 
 def search_pronto_by_problemReportId(problemReportId, prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):

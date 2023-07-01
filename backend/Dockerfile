@@ -10,6 +10,9 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
+# Download NLTK data
+RUN python -c "import nltk; nltk.download('words'); nltk.download('punkt')"
+
 COPY . .
 
 CMD ["python", "app.py"]

@@ -35,8 +35,9 @@ function NextButton({placeholder, text, onClick}) {
           });
           resetText();
         }
+      // eslint-disable-next-line
       }, [isHover]);
-    
+
       async function delayText() {
         await delay(300);
         let aux = text[0];
@@ -47,7 +48,7 @@ function NextButton({placeholder, text, onClick}) {
           if(!isHover) break;
         }
       }
-    
+
       async function resetText() {
         let aux = visibleText;
         for (let i = 1; i <= text.length; i++) {
@@ -59,15 +60,15 @@ function NextButton({placeholder, text, onClick}) {
         await delay(200);
         setText(placeholder);
       }
-    
+
       function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
-    
+
       function handleMouseMove() {
         setHover(true);
       }
-    
+
       function handleMouseLeave() {
         setHover(false);
       }
