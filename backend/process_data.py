@@ -92,9 +92,10 @@ def encode_data(data):
 
 def get_fast_prediction(pronto):
 
-    pronto_from_db = rdb.search_pronto_by_problemReportId(pronto["problemReportId"])
-    if pronto_from_db:
-        return pronto["state"], 1, True
+    if pronto["problemReportId"] != '':
+        pronto_from_db = rdb.search_pronto_by_problemReportId(pronto["problemReportId"])
+        if pronto_from_db:
+            return pronto["state"], 1, True
 
     vectorizer = sld.deserialize_object("vectorizer.pickle")
     dict_vectorizer = sld.deserialize_object("dict_vectorizer.pickle")
@@ -157,7 +158,6 @@ def retrain_ml_model():
         sld.serialize_object("label_encoder.pickle", label_encoder)
         sld.serialize_object("MLmodel.pickle", ml_model)
         sld.serialize_object("accuracy.pickle", accuracy)
-        sld.serialize_object("true_label.pickle", y_test)
     else :
         print("Retrained model is not better. Won't be saved.")
 

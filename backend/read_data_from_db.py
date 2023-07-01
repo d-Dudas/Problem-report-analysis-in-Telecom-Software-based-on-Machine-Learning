@@ -55,3 +55,6 @@ def search_prontos_by_problemReportId_or_title(key, prontos_collection = MongoCl
 
 def search_pronto_by_problemReportId(problemReportId, prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):
     return prontos_collection.find_one({"problemReportId": problemReportId})
+
+def delete_pronto_by_problemReportId(problemReportId, prontos_collection = MongoClient(database_port).prontosdb.prontos_collection):
+    prontos_collection.deleteOne({"problemReportId": problemReportId})
